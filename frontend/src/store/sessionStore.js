@@ -1,36 +1,105 @@
 import { create } from "zustand";
 import api from "../services/api";
 
+// ======================================================
+// STORAGE KEYS
+// ======================================================
+
 const COMPLETED_LESSONS_KEY = "frenchin10_completed_lessons";
 const REVIEW_HISTORY_KEY = "frenchin10_review_history";
 const ACTIVITY_HISTORY_KEY = "frenchin10_activity_history";
 
 // ======================================================
-// LOCAL STORAGE HELPERS
+// GET CURRENT USER ID FROM JWT
 // ======================================================
 
-function loadJson(key, fallback = []) {
+function getCurrentUserId() {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return "guest";
+  }
+
   try {
+    const payload = JSON.parse(
+      atob(
+        token
+          .split(".")[1]
+          .replace(/-/g, "+")
+          .replace(/_/g, "/")
+      )
+    );
+
+    return String(
+      payload.id ||
+        payload.userId ||
+        payload._id ||
+        payload.sub ||
+        "guest"
+    );
+  } catch (error) {
+    console.error("Failed to decode JWT:", error);
+    return "guest";
+  }
+}
+
+// ======================================================
+// USER-SCOPED STORAGE KEY
+// ======================================================
+
+function getStorageKey(baseKey, userId = getCurrentUserId()) {
+  return `${baseKey}_${userId}`;
+}
+
+// ======================================================
+// LOCAL STORAGE
+// ======================================================
+
+function loadJson(
+  baseKey,
+  fallback = [],
+  userId = getCurrentUserId()
+) {
+  try {
+    const key = getStorageKey(baseKey, userId);
     const saved = localStorage.getItem(key);
+
     return saved ? JSON.parse(saved) : fallback;
   } catch (error) {
-    console.error(`Failed to load ${key}:`, error);
+    console.error(`Failed to load ${baseKey}:`, error);
     return fallback;
   }
 }
 
-function saveJson(key, value) {
+function saveJson(
+  baseKey,
+  value,
+  userId = getCurrentUserId()
+) {
   try {
-    localStorage.setItem(key, JSON.stringify(value));
+    const key = getStorageKey(baseKey, userId);
+
+    localStorage.setItem(
+      key,
+      JSON.stringify(value)
+    );
   } catch (error) {
-    console.error(`Failed to save ${key}:`, error);
+    console.error(`Failed to save ${baseKey}:`, error);
   }
 }
 
+// ======================================================
+// DATE
+// ======================================================
+
 function getDateKey(date = new Date()) {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(
+    date.getMonth() + 1
+  ).padStart(2, "0");
+  const day = String(
+    date.getDate()
+  ).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
 }
@@ -88,48 +157,35 @@ const EMPTY_SKILLS = () => ({
 // QUESTION KEY
 // ======================================================
 
-/*
-  Every question needs ONE stable identity.
-
-  Prefer:
-    questionId
-
-  If a section does not provide questionId, fall back to:
-    section + conceptId
-
-  This prevents retries from becoming new questions.
-
-  Example:
-
-  Question 1:
-    wrong
-    questionId = "vocab_bonjour"
-
-  Question 1 retry:
-    correct
-    questionId = "vocab_bonjour"
-
-  These are ONE question, not two.
-*/
-
 function getQuestionKey(item, fallbackIndex = 0) {
-  if (item?.questionId !== undefined && item?.questionId !== null) {
+  if (
+    item?.questionId !== undefined &&
+    item?.questionId !== null
+  ) {
     return String(item.questionId);
   }
 
-  if (item?.questionKey !== undefined && item?.questionKey !== null) {
+  if (
+    item?.questionKey !== undefined &&
+    item?.questionKey !== null
+  ) {
     return String(item.questionKey);
   }
 
-  if (item?.conceptId !== undefined && item?.conceptId !== null) {
+  if (
+    item?.conceptId !== undefined &&
+    item?.conceptId !== null
+  ) {
     return `${item.section || "unknown"}:${item.conceptId}`;
   }
 
-  return `${item?.section || "unknown"}:question_${fallbackIndex}`;
+  return `${
+    item?.section || "unknown"
+  }:question_${fallbackIndex}`;
 }
 
 // ======================================================
-// GET FIRST ATTEMPT PER QUESTION
+// FIRST ATTEMPTS
 // ======================================================
 
 function getFirstAttempts(performance) {
@@ -137,7 +193,10 @@ function getFirstAttempts(performance) {
   const firstAttempts = [];
 
   performance.forEach((item, index) => {
-    const questionKey = getQuestionKey(item, index);
+    const questionKey = getQuestionKey(
+      item,
+      index
+    );
 
     if (seen.has(questionKey)) {
       return;
@@ -154,37 +213,19 @@ function getFirstAttempts(performance) {
 // SKILL STATS
 // ======================================================
 
-/*
-  IMPORTANT:
-
-  Skill scores are based ONLY on the first attempt
-  of each unique question.
-
-  Example:
-
-  Q1 → correct
-  Q2 → correct
-  Q3 → wrong → correct
-  Q4 → wrong → correct
-
-  Skill score:
-
-  2 / 4 = 50%
-
-  NOT:
-
-  4 / 6 = 67%
-*/
-
 function calculateSkillStats(performance) {
   const skills = EMPTY_SKILLS();
 
-  const firstAttempts = getFirstAttempts(performance);
+  const firstAttempts =
+    getFirstAttempts(performance);
 
   firstAttempts.forEach((item) => {
-    const skill = SECTION_TO_SKILL[item.section];
+    const skill =
+      SECTION_TO_SKILL[item.section];
 
-    if (!skill) return;
+    if (!skill) {
+      return;
+    }
 
     skills[skill].total += 1;
 
@@ -197,7 +238,11 @@ function calculateSkillStats(performance) {
     skill.score =
       skill.total === 0
         ? null
-        : Math.round((skill.correct / skill.total) * 100);
+        : Math.round(
+            (skill.correct /
+              skill.total) *
+              100
+          );
   });
 
   return skills;
@@ -207,41 +252,22 @@ function calculateSkillStats(performance) {
 // WEAK CONCEPTS
 // ======================================================
 
-/*
-  Weak concepts intentionally count ALL attempts.
-
-  This is different from the lesson score.
-
-  Example:
-
-  Q:
-    wrong
-    correct
-
-  Lesson score:
-    wrong on first attempt → does NOT count as correct
-
-  Weak concept:
-    incorrect = 1
-    attempts = 2
-
-  This information is useful for the review system.
-*/
-
 function calculateWeakConcepts(performance) {
   const conceptStats = {};
 
   performance.forEach((item) => {
-    if (!item.conceptId) return;
+    if (!item.conceptId) {
+      return;
+    }
 
     if (!conceptStats[item.conceptId]) {
       conceptStats[item.conceptId] = {
         conceptId: item.conceptId,
 
-        // Preserve lesson concept metadata
         french: item.french || "",
         english: item.english || "",
-        type: item.type || "vocabulary",
+        type:
+          item.type || "vocabulary",
 
         attempts: 0,
         correct: 0,
@@ -249,7 +275,8 @@ function calculateWeakConcepts(performance) {
       };
     }
 
-    const concept = conceptStats[item.conceptId];
+    const concept =
+      conceptStats[item.conceptId];
 
     concept.attempts += 1;
 
@@ -259,8 +286,6 @@ function calculateWeakConcepts(performance) {
       concept.incorrect += 1;
     }
 
-    // If the first performance record did not have metadata,
-    // use metadata from a later attempt if available.
     if (!concept.french && item.french) {
       concept.french = item.french;
     }
@@ -274,15 +299,26 @@ function calculateWeakConcepts(performance) {
     }
   });
 
-  // Only concepts that were actually answered incorrectly
   return Object.values(conceptStats)
-    .filter((concept) => concept.incorrect > 0)
+    .filter(
+      (concept) =>
+        concept.incorrect > 0
+    )
     .sort((a, b) => {
-      if (b.incorrect !== a.incorrect) {
-        return b.incorrect - a.incorrect;
+      if (
+        b.incorrect !==
+        a.incorrect
+      ) {
+        return (
+          b.incorrect -
+          a.incorrect
+        );
       }
 
-      return b.attempts - a.attempts;
+      return (
+        b.attempts -
+        a.attempts
+      );
     });
 }
 
@@ -290,26 +326,35 @@ function calculateWeakConcepts(performance) {
 // ACTIVITY
 // ======================================================
 
-function addActivity(history, durationSeconds) {
+function addActivity(
+  history,
+  durationSeconds
+) {
   const today = getDateKey();
 
   const existing = history.find(
-    (item) => item.date === today
+    (item) =>
+      item.date === today
   );
 
   let updated;
 
   if (existing) {
-    updated = history.map((item) =>
-      item.date === today
-        ? {
-            ...item,
-            lessonsCompleted:
-              item.lessonsCompleted + 1,
-            durationSeconds:
-              item.durationSeconds + durationSeconds,
-          }
-        : item
+    updated = history.map(
+      (item) =>
+        item.date === today
+          ? {
+              ...item,
+
+              lessonsCompleted:
+                item.lessonsCompleted +
+                1,
+
+              durationSeconds:
+                item.durationSeconds +
+                durationSeconds,
+            }
+          : item
     );
   } else {
     updated = [
@@ -331,541 +376,564 @@ function addActivity(history, durationSeconds) {
 // STORE
 // ======================================================
 
-const useSessionStore = create((set) => ({
-  // ====================================================
-  // CURRENT SESSION
-  // ====================================================
+const useSessionStore = create(
+  (set) => ({
+    // ==================================================
+    // CURRENT SESSION
+    // ==================================================
 
-  lessonId: null,
+    lessonId: null,
 
-  currentSectionIndex: 0,
+    currentSectionIndex: 0,
 
-  isSessionActive: false,
+    isSessionActive: false,
 
-  startedAt: null,
+    startedAt: null,
 
-  performance: [],
+    performance: [],
 
-  reinforcementQueue: [],
+    reinforcementQueue: [],
 
-  sections: [],
+    sections: [],
 
-  sessionResult: null,
+    sessionResult: null,
 
-  // ====================================================
-  // PERSISTED HISTORY
-  // ====================================================
+    // ==================================================
+    // USER-SCOPED PERSISTED DATA
+    // ==================================================
 
-  completedLessons: loadJson(
-    COMPLETED_LESSONS_KEY
-  ),
+    completedLessons: loadJson(
+      COMPLETED_LESSONS_KEY
+    ),
 
-  reviewHistory: loadJson(
-    REVIEW_HISTORY_KEY
-  ),
+    reviewHistory: loadJson(
+      REVIEW_HISTORY_KEY
+    ),
 
-  activityHistory: loadJson(
-    ACTIVITY_HISTORY_KEY
-  ),
+    activityHistory: loadJson(
+      ACTIVITY_HISTORY_KEY
+    ),
 
-  // ====================================================
-  // START SESSION
-  // ====================================================
+    // ==================================================
+    // LOAD DATA FOR CURRENT USER
+    // ==================================================
 
-  startSession: (lessonId, sections) => {
-    set({
-      lessonId: Number(lessonId),
+    loadUserData: () => {
+      const userId =
+        getCurrentUserId();
 
-      currentSectionIndex: 0,
+      console.log(
+        "👤 Loading data for user:",
+        userId
+      );
 
-      isSessionActive: true,
+      set({
+        completedLessons:
+          loadJson(
+            COMPLETED_LESSONS_KEY,
+            [],
+            userId
+          ),
 
-      startedAt: Date.now(),
+        reviewHistory:
+          loadJson(
+            REVIEW_HISTORY_KEY,
+            [],
+            userId
+          ),
 
-      performance: [],
+        activityHistory:
+          loadJson(
+            ACTIVITY_HISTORY_KEY,
+            [],
+            userId
+          ),
 
-      reinforcementQueue: [],
+        performance: [],
 
-      sections,
+        reinforcementQueue: [],
 
-      sessionResult: null,
-    });
-  },
+        sessionResult: null,
+      });
+    },
 
-  // ====================================================
-  // NEXT SECTION
-  // ====================================================
+    // ==================================================
+    // START SESSION
+    // ==================================================
 
-  nextSection: () => {
-    set((state) => ({
-      currentSectionIndex: Math.min(
-        state.currentSectionIndex + 1,
-        Math.max(
-          0,
-          state.sections.length - 1
-        )
-      ),
-    }));
-  },
+    startSession: (
+      lessonId,
+      sections
+    ) => {
+      set({
+        lessonId: Number(lessonId),
 
-  // ====================================================
-  // ADD PERFORMANCE
-  // ====================================================
+        currentSectionIndex: 0,
 
-  addPerformance: (result) => {
-    console.log(
-      "🔥 PERFORMANCE BEING ADDED:",
-      result
-    );
+        isSessionActive: true,
 
-    set((state) => ({
-      performance: [
-        ...state.performance,
-        result,
-      ],
-    }));
-  },
+        startedAt: Date.now(),
 
-  // ====================================================
-  // REINFORCEMENT
-  // ====================================================
+        performance: [],
 
-  addToReinforcementQueue: (concept) => {
-    set((state) => {
-      const alreadyQueued =
-        state.reinforcementQueue.some(
-          (item) =>
-            item.conceptId ===
-            concept.conceptId
-        );
+        reinforcementQueue: [],
 
-      if (alreadyQueued) {
-        return state;
-      }
+        sections,
 
-      return {
-        reinforcementQueue: [
-          ...state.reinforcementQueue,
-          concept,
+        sessionResult: null,
+      });
+    },
+
+    // ==================================================
+    // NEXT SECTION
+    // ==================================================
+
+    nextSection: () => {
+      set((state) => ({
+        currentSectionIndex:
+          Math.min(
+            state.currentSectionIndex +
+              1,
+
+            Math.max(
+              0,
+              state.sections.length -
+                1
+            )
+          ),
+      }));
+    },
+
+    // ==================================================
+    // ADD PERFORMANCE
+    // ==================================================
+
+    addPerformance: (result) => {
+      set((state) => ({
+        performance: [
+          ...state.performance,
+          result,
         ],
-      };
-    });
-  },
+      }));
+    },
 
-  removeFromReinforcementQueue: (
-    conceptId
-  ) => {
-    set((state) => ({
-      reinforcementQueue:
-        state.reinforcementQueue.filter(
-          (item) =>
-            item.conceptId !== conceptId
-        ),
-    }));
-  },
+    // ==================================================
+    // REINFORCEMENT
+    // ==================================================
 
-  // ====================================================
-  // GET WEAK CONCEPTS
-  // ====================================================
-
-  getWeakConcepts: () => {
-    return calculateWeakConcepts(
-      useSessionStore.getState().performance
-    );
-  },
-
-  // ====================================================
-  // STREAK / ACTIVITY
-  // ====================================================
-
-  getStreakStats: () => {
-    const {
-      activityHistory,
-    } = useSessionStore.getState();
-
-    const activeDates = new Set(
-      activityHistory.map(
-        (item) => item.date
-      )
-    );
-
-    let currentStreak = 0;
-
-    const cursor = new Date();
-
-    if (
-      !activeDates.has(
-        getDateKey(cursor)
-      )
-    ) {
-      cursor.setDate(
-        cursor.getDate() - 1
-      );
-    }
-
-    while (
-      activeDates.has(
-        getDateKey(cursor)
-      )
-    ) {
-      currentStreak += 1;
-
-      cursor.setDate(
-        cursor.getDate() - 1
-      );
-    }
-
-    const sortedDates = [
-      ...activeDates,
-    ].sort();
-
-    let longestStreak = 0;
-
-    let running = 0;
-
-    let previous = null;
-
-    sortedDates.forEach(
-      (dateString) => {
-        const current = new Date(
-          `${dateString}T00:00:00`
-        );
-
-        if (!previous) {
-          running = 1;
-        } else {
-          const diff = Math.round(
-            (current - previous) /
-              86400000
+    addToReinforcementQueue: (
+      concept
+    ) => {
+      set((state) => {
+        const alreadyQueued =
+          state.reinforcementQueue.some(
+            (item) =>
+              item.conceptId ===
+              concept.conceptId
           );
 
-          running =
-            diff === 1
-              ? running + 1
-              : 1;
+        if (alreadyQueued) {
+          return state;
         }
 
-        longestStreak = Math.max(
-          longestStreak,
-          running
+        return {
+          reinforcementQueue: [
+            ...state.reinforcementQueue,
+            concept,
+          ],
+        };
+      });
+    },
+
+    removeFromReinforcementQueue:
+      (conceptId) => {
+        set((state) => ({
+          reinforcementQueue:
+            state.reinforcementQueue.filter(
+              (item) =>
+                item.conceptId !==
+                conceptId
+            ),
+        }));
+      },
+
+    // ==================================================
+    // GET WEAK CONCEPTS
+    // ==================================================
+
+    getWeakConcepts: () => {
+      return calculateWeakConcepts(
+        useSessionStore.getState()
+          .performance
+      );
+    },
+
+    // ==================================================
+    // STREAK / ACTIVITY
+    // ==================================================
+
+    getStreakStats: () => {
+      const {
+        activityHistory,
+      } =
+        useSessionStore.getState();
+
+      const activeDates =
+        new Set(
+          activityHistory.map(
+            (item) => item.date
+          )
         );
 
-        previous = current;
+      let currentStreak = 0;
+
+      const cursor = new Date();
+
+      if (
+        !activeDates.has(
+          getDateKey(cursor)
+        )
+      ) {
+        cursor.setDate(
+          cursor.getDate() - 1
+        );
       }
-    );
 
-    const totalLessons =
-      activityHistory.reduce(
-        (sum, day) =>
-          sum + day.lessonsCompleted,
-        0
-      );
+      while (
+        activeDates.has(
+          getDateKey(cursor)
+        )
+      ) {
+        currentStreak += 1;
 
-    const totalSeconds =
-      activityHistory.reduce(
-        (sum, day) =>
-          sum + day.durationSeconds,
-        0
-      );
+        cursor.setDate(
+          cursor.getDate() - 1
+        );
+      }
 
-    return {
-      currentStreak,
+      const sortedDates = [
+        ...activeDates,
+      ].sort();
 
-      longestStreak,
+      let longestStreak = 0;
+      let running = 0;
+      let previous = null;
 
-      totalLessons,
+      sortedDates.forEach(
+        (dateString) => {
+          const current =
+            new Date(
+              `${dateString}T00:00:00`
+            );
 
-      totalSeconds,
+          if (!previous) {
+            running = 1;
+          } else {
+            const diff =
+              Math.round(
+                (current -
+                  previous) /
+                  86400000
+              );
 
-      totalMinutes:
-        Math.round(
-          totalSeconds / 60
-        ),
-    };
-  },
-
-  // ====================================================
-  // REVIEW HISTORY
-  // ====================================================
-
-  saveReviewResult: async (
-    reviewResult
-  ) => {
-    try {
-      const response =
-        await api.post(
-          "/review",
-          {
-            lessonId:
-              reviewResult.lessonId,
-
-            conceptId:
-              reviewResult.conceptId,
-
-            french:
-              reviewResult.french,
-
-            english:
-              reviewResult.english,
-
-            score:
-              reviewResult.score ??
-              100,
-
-            type:
-              reviewResult.type ??
-              "vocabulary",
+            running =
+              diff === 1
+                ? running + 1
+                : 1;
           }
+
+          longestStreak =
+            Math.max(
+              longestStreak,
+              running
+            );
+
+          previous = current;
+        }
+      );
+
+      const totalLessons =
+        activityHistory.reduce(
+          (sum, day) =>
+            sum +
+            day.lessonsCompleted,
+          0
         );
 
-      console.log(
-        "✅ Review saved to MongoDB:",
-        response.data
-      );
+      const totalSeconds =
+        activityHistory.reduce(
+          (sum, day) =>
+            sum +
+            day.durationSeconds,
+          0
+        );
 
-      set((state) => ({
-        reviewHistory: [
-          ...state.reviewHistory.filter(
-            (item) =>
-              !(
-                String(item.lessonId) ===
-                  String(
-                    reviewResult.lessonId
-                  ) &&
-                item.conceptId ===
-                  reviewResult.conceptId
-              )
+      return {
+        currentStreak,
+        longestStreak,
+        totalLessons,
+        totalSeconds,
+        totalMinutes:
+          Math.round(
+            totalSeconds / 60
           ),
-
-          {
-            ...reviewResult,
-            ...response.data,
-          },
-        ],
-      }));
-    } catch (error) {
-      console.error(
-        "❌ Failed to save review:",
-        error.response?.data ||
-          error.message
-      );
-
-      // Keep local review as fallback
-      set((state) => ({
-        reviewHistory: [
-          ...state.reviewHistory.filter(
-            (item) =>
-              !(
-                String(item.lessonId) ===
-                  String(
-                    reviewResult.lessonId
-                  ) &&
-                item.conceptId ===
-                  reviewResult.conceptId
-              )
-          ),
-
-          reviewResult,
-        ],
-      }));
-    }
-  },
-
-  // ====================================================
-  // FINALIZE SESSION
-  // ====================================================
-
-  finalizeSession: async (
-    finalPerformance = null
-  ) => {
-    const state =
-      useSessionStore.getState();
-
-    let performance =
-      state.performance;
-
-    // Add final record if supplied
-    if (finalPerformance) {
-      performance = [
-        ...performance,
-        finalPerformance,
-      ];
-    }
+      };
+    },
 
     // ==================================================
-    // FIRST-ATTEMPT SCORING
+    // REVIEW HISTORY
     // ==================================================
 
-    /*
-      IMPORTANT:
+    saveReviewResult:
+      async (reviewResult) => {
+        try {
+          const response =
+            await api.post(
+              "/review",
+              {
+                lessonId:
+                  reviewResult.lessonId,
 
-      totalQuestions = UNIQUE questions
+                conceptId:
+                  reviewResult.conceptId,
 
-      correctAnswers = questions correct
-      on their FIRST attempt
+                french:
+                  reviewResult.french,
 
-      Retries do NOT change the lesson score.
-    */
+                english:
+                  reviewResult.english,
 
-    const firstAttempts =
-      getFirstAttempts(performance);
+                score:
+                  reviewResult.score ??
+                  100,
 
-    const totalQuestions =
-      firstAttempts.length;
+                type:
+                  reviewResult.type ??
+                  "vocabulary",
+              }
+            );
 
-    const correctAnswers =
-      firstAttempts.filter(
-        (item) =>
-          item.correct === true
-      ).length;
+          set((state) => ({
+            reviewHistory: [
+              ...state.reviewHistory.filter(
+                (item) =>
+                  !(
+                    String(
+                      item.lessonId
+                    ) ===
+                      String(
+                        reviewResult.lessonId
+                      ) &&
+                    item.conceptId ===
+                      reviewResult.conceptId
+                  )
+              ),
 
-    const incorrectAnswers =
-      totalQuestions -
-      correctAnswers;
-
-    const score =
-      totalQuestions === 0
-        ? 0
-        : Math.round(
-            (correctAnswers /
-              totalQuestions) *
-              100
+              {
+                ...reviewResult,
+                ...response.data,
+              },
+            ],
+          }));
+        } catch (error) {
+          console.error(
+            "Failed to save review:",
+            error.response?.data ||
+              error.message
           );
 
+          set((state) => ({
+            reviewHistory: [
+              ...state.reviewHistory.filter(
+                (item) =>
+                  !(
+                    String(
+                      item.lessonId
+                    ) ===
+                      String(
+                        reviewResult.lessonId
+                      ) &&
+                    item.conceptId ===
+                      reviewResult.conceptId
+                  )
+              ),
+
+              reviewResult,
+            ],
+          }));
+        }
+      },
+
     // ==================================================
-    // WEAK CONCEPTS
+    // FINALIZE SESSION
     // ==================================================
 
-    const weakConcepts =
-      calculateWeakConcepts(
-        performance
-      );
+    finalizeSession: async (
+      finalPerformance = null
+    ) => {
+      const state =
+        useSessionStore.getState();
 
-    // ==================================================
-    // SKILL STATS
-    // ==================================================
+      let performance =
+        state.performance;
 
-    const skillStats =
-      calculateSkillStats(
-        performance
-      );
+      if (finalPerformance) {
+        performance = [
+          ...performance,
+          finalPerformance,
+        ];
+      }
 
-    // ==================================================
-    // DURATION
-    // ==================================================
+      // ----------------------------------------------
+      // FIRST ATTEMPT SCORING
+      // ----------------------------------------------
 
-    const durationSeconds =
-      state.startedAt
-        ? Math.max(
-            1,
-            Math.round(
-              (Date.now() -
-                state.startedAt) /
-                1000
+      const firstAttempts =
+        getFirstAttempts(
+          performance
+        );
+
+      const totalQuestions =
+        firstAttempts.length;
+
+      const correctAnswers =
+        firstAttempts.filter(
+          (item) =>
+            item.correct === true
+        ).length;
+
+      const incorrectAnswers =
+        totalQuestions -
+        correctAnswers;
+
+      const score =
+        totalQuestions === 0
+          ? 0
+          : Math.round(
+              (correctAnswers /
+                totalQuestions) *
+                100
+            );
+
+      // ----------------------------------------------
+      // WEAK CONCEPTS
+      // ----------------------------------------------
+
+      const weakConcepts =
+        calculateWeakConcepts(
+          performance
+        );
+
+      // ----------------------------------------------
+      // SKILL STATS
+      // ----------------------------------------------
+
+      const skillStats =
+        calculateSkillStats(
+          performance
+        );
+
+      // ----------------------------------------------
+      // DURATION
+      // ----------------------------------------------
+
+      const durationSeconds =
+        state.startedAt
+          ? Math.max(
+              1,
+              Math.round(
+                (Date.now() -
+                  state.startedAt) /
+                  1000
+              )
             )
-          )
-        : 0;
+          : 0;
 
-    // ==================================================
-    // RESULT
-    // ==================================================
+      // ----------------------------------------------
+      // RESULT
+      // ----------------------------------------------
 
-    const result = {
-      lessonId:
-        state.lessonId,
+      const result = {
+        lessonId:
+          state.lessonId,
 
-      totalQuestions,
+        totalQuestions,
 
-      correctAnswers,
+        correctAnswers,
 
-      incorrectAnswers,
+        incorrectAnswers,
 
-      score,
+        score,
 
-      skillStats,
+        skillStats,
 
-      weakConcepts,
+        weakConcepts,
 
-      completedAt:
-        Date.now(),
+        completedAt:
+          Date.now(),
 
-      durationSeconds,
-    };
+        durationSeconds,
+      };
 
-    console.log(
-      "🔥 FINAL SESSION RESULT:",
-      result
-    );
+      // ----------------------------------------------
+      // USER-SCOPED LOCAL DATA
+      // ----------------------------------------------
 
-    console.log(
-      "🔥 FIRST ATTEMPTS:",
-      firstAttempts
-    );
+      const userId =
+        getCurrentUserId();
 
-    console.log(
-      "🔥 FINAL WEAK CONCEPTS:",
-      result.weakConcepts
-    );
+      const updatedCompletedLessons =
+        [
+          ...state.completedLessons.filter(
+            (lesson) =>
+              String(
+                lesson.lessonId
+              ) !==
+              String(
+                state.lessonId
+              )
+          ),
 
-    // ==================================================
-    // SAVE LOCALLY
-    // ==================================================
+          result,
+        ];
 
-    const updatedCompletedLessons = [
-      ...state.completedLessons.filter(
-        (lesson) =>
-          String(
-            lesson.lessonId
-          ) !==
-          String(
-            state.lessonId
-          )
-      ),
+      const updatedActivityHistory =
+        addActivity(
+          state.activityHistory,
+          durationSeconds
+        );
 
-      result,
-    ];
-
-    const updatedActivityHistory =
-      addActivity(
-        state.activityHistory,
-        durationSeconds
-      );
-
-    saveJson(
-      COMPLETED_LESSONS_KEY,
-      updatedCompletedLessons
-    );
-
-    saveJson(
-      ACTIVITY_HISTORY_KEY,
-      updatedActivityHistory
-    );
-
-    set({
-      sessionResult: result,
-
-      isSessionActive: false,
-
-      performance,
-
-      completedLessons:
+      saveJson(
+        COMPLETED_LESSONS_KEY,
         updatedCompletedLessons,
-
-      activityHistory:
-        updatedActivityHistory,
-    });
-
-    // ==================================================
-    // SAVE TO MONGODB
-    // ==================================================
-
-    try {
-      console.log(
-        "🔥 WEAK CONCEPTS BEING SENT:",
-        result.weakConcepts
+        userId
       );
 
-      const response =
+      saveJson(
+        ACTIVITY_HISTORY_KEY,
+        updatedActivityHistory,
+        userId
+      );
+
+      set({
+        sessionResult: result,
+
+        isSessionActive: false,
+
+        performance,
+
+        completedLessons:
+          updatedCompletedLessons,
+
+        activityHistory:
+          updatedActivityHistory,
+      });
+
+      // ----------------------------------------------
+      // SAVE TO MONGODB
+      // ----------------------------------------------
+
+      try {
         await api.post(
           "/progress",
           {
@@ -895,33 +963,29 @@ const useSessionStore = create((set) => ({
           }
         );
 
-      console.log(
-        "✅ Progress saved to MongoDB:",
-        response.data
-      );
+        return result;
+      } catch (error) {
+        console.error(
+          "Failed to save progress to MongoDB:",
+          error.response?.data ||
+            error.message
+        );
 
-      return result;
-    } catch (error) {
-      console.error(
-        "❌ Failed to save progress to MongoDB:",
-        error.response?.data ||
-          error.message
-      );
+        // Local progress is preserved.
+        return result;
+      }
+    },
 
-      // Local progress is still preserved.
-      return result;
-    }
-  },
+    // ==================================================
+    // END SESSION
+    // ==================================================
 
-  // ====================================================
-  // END SESSION
-  // ====================================================
-
-  endSession: () => {
-    set({
-      isSessionActive: false,
-    });
-  },
-}));
+    endSession: () => {
+      set({
+        isSessionActive: false,
+      });
+    },
+  })
+);
 
 export default useSessionStore;
