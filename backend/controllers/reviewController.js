@@ -3,26 +3,28 @@ import { selectPriorityReviews } from "../utils/reviewEngine.js";
 
 // ======================================================
 // GET ALL ACTIVE REVIEWS
-// Optional ?lessonId= filter so pages can ask for just
-// the reviews belonging to one lesson.
+// Optional ?lessonId= filter
 // ======================================================
 
 export async function getReview(req, res) {
   try {
     const { lessonId } = req.query;
 
-    const query = { user: req.user.id };
+    const query = {
+      user: req.user.id,
+    };
 
     if (lessonId !== undefined) {
       query.lessonId = Number(lessonId);
     }
 
-    const reviews = await Review.find(query).sort({ nextReviewAt: 1 });
+    const reviews = await Review.find(query).sort({
+      nextReviewAt: 1,
+    });
 
     res.json(reviews);
   } catch (error) {
-    console.error("========== REVIEW ERROR ==========");
-    console.error(error);
+    console.error("GET REVIEW ERROR:", error);
 
     res.status(500).json({
       message: error.message,
@@ -36,11 +38,14 @@ export async function getReview(req, res) {
 
 export async function addReview(req, res) {
   try {
-    console.log("🔥 REVIEW REQUEST");
-    console.log("BODY:", req.body);
-    console.log("USER:", req.user.id);
-
-    const { conceptId, lessonId, french, english, type, correct } = req.body;
+    const {
+      conceptId,
+      lessonId,
+      french,
+      english,
+      type,
+      correct,
+    } = req.body;
 
     // --------------------------------------------------
     // VALIDATION
@@ -59,8 +64,12 @@ export async function addReview(req, res) {
     }
 
     // ==================================================
-    // CORRECT ANSWER — concept is mastered, remove it
-    // from the active review collection.
+    // CORRECT
+    //
+    // A correct review means the concept has been
+    // successfully mastered for this review cycle.
+    //
+    // Remove it from the active Review collection.
     // ==================================================
 
     if (correct === true) {
@@ -69,9 +78,6 @@ export async function addReview(req, res) {
         conceptId,
       });
 
-      console.log("✅ REVIEW MASTERED:", conceptId);
-      console.log("🗑️ REVIEW DOCUMENTS REMOVED:", deleteResult.deletedCount);
-
       return res.status(200).json({
         success: true,
         mastered: true,
@@ -79,20 +85,13 @@ export async function addReview(req, res) {
         deletedCount: deleteResult.deletedCount,
         conceptId,
       });
-
-      console.log("✅ REVIEW MASTERED:", conceptId);
-      console.log("🗑️ REVIEW REMOVED:", deletedReview?._id || "not found");
-
-      return res.status(200).json({
-        success: true,
-        mastered: true,
-        deleted: Boolean(deletedReview),
-        conceptId,
-      });
     }
 
     // ==================================================
-    // INCORRECT ANSWER
+    // INCORRECT
+    //
+    // Keep the concept in the review collection and
+    // schedule it again.
     // ==================================================
 
     let review = await Review.findOne({
@@ -113,7 +112,10 @@ export async function addReview(req, res) {
 
     review.incorrectCount += 1;
 
-    review.difficulty = Math.min(5, review.difficulty + 0.5);
+    review.difficulty = Math.min(
+      5,
+      review.difficulty + 0.5
+    );
 
     review.repetitions = 0;
     review.interval = 1;
@@ -121,18 +123,18 @@ export async function addReview(req, res) {
     review.lastReviewedAt = new Date();
 
     const nextReview = new Date();
-    nextReview.setDate(nextReview.getDate() + review.interval);
+
+    nextReview.setDate(
+      nextReview.getDate() + review.interval
+    );
 
     review.nextReviewAt = nextReview;
 
     await review.save();
 
-    console.log("❌ REVIEW FAILED — kept in review:", review.conceptId);
-
     return res.status(200).json(review);
   } catch (error) {
-    console.error("========== REVIEW UPDATE ERROR ==========");
-    console.error(error);
+    console.error("REVIEW UPDATE ERROR:", error);
 
     res.status(500).json({
       message: error.message,
@@ -141,7 +143,7 @@ export async function addReview(req, res) {
 }
 
 // ======================================================
-// GET DUE REVIEWS
+// GET PRIORITY / DUE REVIEWS
 // ======================================================
 
 export async function getDueReviews(req, res) {
@@ -150,12 +152,12 @@ export async function getDueReviews(req, res) {
       user: req.user.id,
     });
 
-    const selectedReviews = selectPriorityReviews(reviews, 3);
+    const selectedReviews =
+      selectPriorityReviews(reviews, 3);
 
     res.json(selectedReviews);
   } catch (error) {
-    console.error("========== DUE REVIEW ERROR ==========");
-    console.error(error);
+    console.error("DUE REVIEW ERROR:", error);
 
     res.status(500).json({
       message: error.message,

@@ -33,6 +33,8 @@ export function getLessons(req, res) {
 
     res.json(lessons);
   } catch (error) {
+    console.error("GET LESSONS ERROR:", error);
+
     res.status(500).json({
       message: error.message,
     });
@@ -53,16 +55,15 @@ export function getLesson(req, res) {
     }
 
     const lesson = JSON.parse(
-      fs.readFileSync(
-        lessonPath,
-        "utf8"
-      )
+      fs.readFileSync(lessonPath, "utf8")
     );
 
     res.json(lesson);
   } catch (error) {
-    
-  }res.status(500).json({
+    console.error("GET LESSON ERROR:", error);
+
+    res.status(500).json({
       message: error.message,
     });
+  }
 }
