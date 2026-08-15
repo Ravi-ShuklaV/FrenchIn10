@@ -685,7 +685,7 @@ function LessonSession() {
 
         {!showPriorityReviews &&
           currentSection.id ===
-            "writtenNotes" && (
+            "handwriting" && (
             <WrittenNotesSection
               lesson={lesson}
               onComplete={nextSection}
@@ -697,13 +697,12 @@ function LessonSession() {
         ========================= */}
 
         {!showPriorityReviews &&
-          currentSection.id ===
-            "speaking" && (
-            <SpeakingSection
-              speaking={lesson.speaking}
-              onComplete={nextSection}
-            />
-          )}
+  currentSection.id === "speaking" && (
+    <SpeakingSection
+      speaking={lesson.practice?.speaking || []}
+      onComplete={handleSectionComplete}
+    />
+  )}
 
         {/* =========================
             MISSION

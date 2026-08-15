@@ -1,62 +1,39 @@
 import { useEffect, useRef, useState } from "react";
 import useSessionStore from "../../store/sessionStore";
 import { normalize } from "../../utils/textUtils";
+
 function SentenceRecallSection({ practice = [], onComplete }) {
-  const addPerformance = useSessionStore((state) => state.addPerformance);
+  const addPerformance = useSessionStore(
+    (state) => state.addPerformance
+  );
 
   const contentRef = useRef(null);
 
   const [typedAnswer, setTypedAnswer] = useState("");
-
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-
   const [feedback, setFeedback] = useState(null);
+  const [questionStartedAt, setQuestionStartedAt] =
+    useState(Date.now());
 
-  const [questionStartedAt, setQuestionStartedAt] = useState(Date.now());
+  // ==========================================
+  // GET SENTENCE RECALL QUESTIONS
+  // ==========================================
 
-  // =========================
-  // NORMALIZE PRACTICE DATA
-  // =========================
-
-  /*
-   * Your current lesson JSON has:
-   *
-   * "practice": [
-   *   {
-   *     "question": "...",
-   *     "answer": "..."
-   *   }
-   * ]
-   *
-   * Later we can move to:
-   *
-   * "practice": {
-   *   "sentenceRecall": [...]
-   * }
-   *
-   * This component supports both.
-   */
-
-  let questions = [];
-
-  if (Array.isArray(practice)) {
-    questions = practice;
-  } else if (practice && Array.isArray(practice.sentenceRecall)) {
-    questions = practice.sentenceRecall;
-  }
+  const questions = Array.isArray(practice)
+    ? practice
+    : Array.isArray(practice?.sentenceRecall)
+      ? practice.sentenceRecall
+      : [];
 
   const currentQuestion = questions[currentIndex];
 
-  // =========================
-  // RESET QUESTION
-  // =========================
+  // ==========================================
+  // RESET WHEN QUESTION CHANGES
+  // ==========================================
 
   useEffect(() => {
-    setSelectedAnswer(null);
-    setFeedback(null);
     setTypedAnswer("");
+    setFeedback(null);
     setQuestionStartedAt(Date.now());
 
     if (contentRef.current) {
@@ -67,13 +44,16 @@ function SentenceRecallSection({ practice = [], onComplete }) {
     }
   }, [currentIndex]);
 
-  // =========================
+  // ==========================================
   // NO QUESTIONS
-  // =========================
+  // ==========================================
 
   if (!questions.length) {
     return (
-      <div ref={contentRef} className="max-w-3xl mx-auto text-center py-12">
+      <div
+        ref={contentRef}
+        className="max-w-3xl mx-auto text-center py-12"
+      >
         <p className="text-sm text-emerald-600 font-semibold uppercase tracking-wide">
           Sentence Recall
         </p>
@@ -83,8 +63,8 @@ function SentenceRecallSection({ practice = [], onComplete }) {
         </h2>
 
         <p className="text-gray-500 mt-3">
-          This lesson does not have any sentence recall exercises configured
-          yet.
+          This lesson does not have any sentence recall
+          exercises configured yet.
         </p>
 
         <button
@@ -98,77 +78,103 @@ function SentenceRecallSection({ practice = [], onComplete }) {
     );
   }
 
-  // =========================
-  // CURRENT QUESTION
-  // =========================
-
   if (!currentQuestion) {
     return null;
   }
 
-  // =========================
-  // GET QUESTION DATA
-  // =========================
+  // ==========================================
+  // NEW JSON STRUCTURE
+  //
+  // prompt
+  // expectedAnswer
+  // acceptedAnswers[]
+  // targetConcepts[]
+  // ==========================================
 
-  const questionText = currentQuestion.question || currentQuestion.prompt || "";
-
-  const options = currentQuestion.options || [];
+  const questionText =
+    currentQuestion.prompt ||
+    currentQuestion.question ||
+    "";
 
   const correctAnswer =
-    currentQuestion.correctAnswer || currentQuestion.answer || "";
+    currentQuestion.expectedAnswer ||
+    currentQuestion.correctAnswer ||
+    currentQuestion.answer ||
+    "";
+
+  const acceptedAnswers =
+    Array.isArray(currentQuestion.acceptedAnswers) &&
+    currentQuestion.acceptedAnswers.length > 0
+      ? currentQuestion.acceptedAnswers
+      : [correctAnswer];
 
   const conceptId =
-  currentQuestion.conceptId ||
-  currentQuestion.targetConcepts?.[0] ||
-  null;
+    currentQuestion.conceptId ||
+    currentQuestion.targetConcepts?.[0] ||
+    null;
 
-  // =========================
-  // SUBMIT
-  // =========================
+  // ==========================================
+  // CHECK ANSWER
+  // ==========================================
 
-  function handleAnswer(option) {
-    if (feedback) {
+  function handleSubmit() {
+    if (!typedAnswer.trim() || feedback) {
       return;
     }
 
-    setSelectedAnswer(option);
+    const userAnswer = normalize(typedAnswer);
 
-   const correct =
-  normalize(option) === normalize(correctAnswer);
+    const correct = acceptedAnswers.some(
+      (acceptedAnswer) =>
+        normalize(acceptedAnswer) === userAnswer
+    );
 
-    const responseTime = Math.round((Date.now() - questionStartedAt) / 1000);
+    const responseTime = Math.round(
+      (Date.now() - questionStartedAt) / 1000
+    );
 
-    // =========================
+    console.log("📝 SENTENCE RECALL");
+    console.log("Question:", questionText);
+    console.log("User answer:", typedAnswer);
+    console.log("Expected:", correctAnswer);
+    console.log("Accepted:", acceptedAnswers);
+    console.log("Correct:", correct);
+
+    // ==========================================
     // RECORD PERFORMANCE
-    // =========================
+    // ==========================================
 
-   addPerformance({
-  questionId: `sentenceRecall_${conceptId}_${currentIndex}`,
+    addPerformance({
+      questionId:
+        currentQuestion.id ||
+        `sentenceRecall_${currentIndex}`,
 
-  conceptId,
+      conceptId,
 
-  french: correctAnswer,
-  english: questionText,
-  type: "phrase",
+      french: correctAnswer,
 
-  section: "sentenceRecall",
+      english: questionText,
 
-  attempts: 1,
+      type: "phrase",
 
-  correct,
+      section: "sentenceRecall",
 
-  score: correct ? 1 : 0,
+      attempts: 1,
 
-  responseTime,
+      correct,
 
-  hintsUsed: 0,
+      score: correct ? 1 : 0,
 
-  isReinforcement: false,
-});
+      responseTime,
 
-    // =========================
+      hintsUsed: 0,
+
+      isReinforcement: false,
+    });
+
+    // ==========================================
     // CORRECT
-    // =========================
+    // ==========================================
 
     if (correct) {
       setFeedback({
@@ -178,18 +184,20 @@ function SentenceRecallSection({ practice = [], onComplete }) {
 
       setTimeout(() => {
         if (currentIndex < questions.length - 1) {
-          setCurrentIndex((prev) => prev + 1);
+          setCurrentIndex(
+            (previous) => previous + 1
+          );
         } else {
           onComplete();
         }
-      }, 600);
+      }, 700);
 
       return;
     }
 
-    // =========================
+    // ==========================================
     // WRONG
-    // =========================
+    // ==========================================
 
     setFeedback({
       type: "wrong",
@@ -197,21 +205,23 @@ function SentenceRecallSection({ practice = [], onComplete }) {
     });
   }
 
-  // =========================
+  // ==========================================
   // PROGRESS
-  // =========================
+  // ==========================================
 
-  const progress = ((currentIndex + 1) / questions.length) * 100;
+  const progress =
+    ((currentIndex + 1) / questions.length) * 100;
 
-  // =========================
-  // UI
-  // =========================
+  // ==========================================
+  // RENDER
+  // ==========================================
 
   return (
-    <div ref={contentRef} className="max-w-3xl mx-auto scroll-mt-6">
-      {/* =========================
-          HEADER
-      ========================= */}
+    <div
+      ref={contentRef}
+      className="max-w-3xl mx-auto scroll-mt-6"
+    >
+      {/* HEADER */}
 
       <div className="text-center mb-8">
         <p className="text-sm text-emerald-600 font-semibold uppercase tracking-wide">
@@ -222,17 +232,18 @@ function SentenceRecallSection({ practice = [], onComplete }) {
           Sentence Recall
         </h2>
 
-        <p className="text-gray-500 mt-2">Use what you just learned.</p>
+        <p className="text-gray-500 mt-2">
+          Use what you just learned.
+        </p>
       </div>
 
-      {/* =========================
-          PROGRESS
-      ========================= */}
+      {/* PROGRESS */}
 
       <div className="mb-6">
         <div className="flex justify-between text-sm text-gray-400 mb-2">
           <span>
-            Question {currentIndex + 1} / {questions.length}
+            Question {currentIndex + 1} /{" "}
+            {questions.length}
           </span>
 
           <span>Practice</span>
@@ -248,116 +259,97 @@ function SentenceRecallSection({ practice = [], onComplete }) {
         </div>
       </div>
 
-      {/* =========================
-          QUESTION CARD
-      ========================= */}
+      {/* QUESTION */}
 
       <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-8">
         <p className="text-xl font-semibold text-slate-800 text-center">
           {questionText}
         </p>
 
-        {/* =========================
-            OPTIONS
-        ========================= */}
+        {/* INPUT */}
 
-        {options.length > 0 ? (
-          <div className="mt-8 space-y-3">
-            {options.map((option) => {
-              const isSelected = selectedAnswer === option;
+        <div className="mt-8">
+          <p className="text-sm text-gray-500 mb-2">
+            Your answer
+          </p>
 
-              const isCorrect =
-                feedback?.type === "correct" && option === correctAnswer;
-
-              const isWrong = feedback?.type === "wrong" && isSelected;
-
-              let classes =
-                "border-gray-200 hover:border-emerald-400 hover:bg-emerald-50";
-
-              if (isSelected) {
-                classes = "border-emerald-500 bg-emerald-50";
+          <input
+            type="text"
+            value={typedAnswer}
+            disabled={!!feedback}
+            onChange={(event) =>
+              setTypedAnswer(event.target.value)
+            }
+            onKeyDown={(event) => {
+              if (
+                event.key === "Enter" &&
+                typedAnswer.trim() &&
+                !feedback
+              ) {
+                handleSubmit();
               }
+            }}
+            placeholder="Type your answer..."
+            autoFocus
+            className={`w-full border rounded-xl px-4 py-3 outline-none transition ${
+              feedback?.type === "correct"
+                ? "border-emerald-500 focus:ring-2 focus:ring-emerald-300"
+                : feedback?.type === "wrong"
+                  ? "border-red-400 focus:ring-2 focus:ring-red-300"
+                  : "border-gray-300 focus:ring-2 focus:ring-emerald-500"
+            }`}
+          />
+        </div>
 
-              if (isCorrect) {
-                classes = "border-emerald-500 bg-emerald-100";
-              }
+        {/* CHECK BUTTON */}
 
-              if (isWrong) {
-                classes = "border-red-400 bg-red-50";
-              }
-
-              return (
-                <button
-                  key={option}
-                  type="button"
-                  disabled={!!feedback}
-                  onClick={() => handleAnswer(option)}
-                  className={`w-full text-left border-2 rounded-xl px-5 py-4 font-medium transition ${classes}`}
-                >
-                  {option}
-                </button>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="mt-8">
-            <p className="text-sm text-gray-500 mb-2">Your answer</p>
-
-            <input
-              type="text"
-              value={typedAnswer}
-              disabled={!!feedback}
-              onChange={(event) => {
-                setTypedAnswer(event.target.value);
-              }}
-              placeholder="Type your answer..."
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-emerald-500"
-              onKeyDown={(event) => {
-                if (event.key !== "Enter" || feedback || !typedAnswer.trim()) {
-                  return;
-                }
-
-                handleAnswer(typedAnswer.trim());
-              }}
-            />
-          </div>
+        {!feedback && (
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={!typedAnswer.trim()}
+            className="w-full mt-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold transition"
+          >
+            Check Answer
+          </button>
         )}
 
-        {/* =========================
-            FEEDBACK
-        ========================= */}
+        {/* FEEDBACK */}
 
         {feedback && (
           <div
-            className={`mt-6 rounded-xl p-4 text-center font-semibold ${
+            className={`mt-6 rounded-xl p-4 text-center ${
               feedback.type === "correct"
                 ? "bg-emerald-100 text-emerald-700"
                 : "bg-red-100 text-red-700"
             }`}
           >
-            {feedback.message}
+            <p className="font-semibold">
+              {feedback.message}
+            </p>
 
             {feedback.type === "wrong" && (
               <>
-                <p className="text-sm font-normal mt-1">Correct answer:</p>
+                <p className="text-sm font-normal mt-2">
+                  Correct answer:
+                </p>
 
-                <p className="font-bold mt-1">{correctAnswer}</p>
+                <p className="font-bold mt-1">
+                  {correctAnswer}
+                </p>
               </>
             )}
           </div>
         )}
 
-        {/* =========================
-            TRY AGAIN
-        ========================= */}
+        {/* TRY AGAIN */}
 
         {feedback?.type === "wrong" && (
           <button
             type="button"
             onClick={() => {
-              setSelectedAnswer(null);
-              setFeedback(null);
               setTypedAnswer("");
+              setFeedback(null);
               setQuestionStartedAt(Date.now());
             }}
             className="w-full mt-5 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white font-semibold transition"

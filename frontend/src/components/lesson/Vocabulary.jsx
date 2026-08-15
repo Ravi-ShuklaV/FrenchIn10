@@ -1,6 +1,6 @@
-import PronunciationButton from "./PronunciationButton";
+import SpeakerButton from "../common/SpeakerButton";
 
-function Vocabulary({ vocabulary }) {
+function Vocabulary({ vocabulary = [] }) {
   return (
     <section>
       <h2 className="text-2xl font-semibold mb-5">
@@ -11,19 +11,21 @@ function Vocabulary({ vocabulary }) {
         {vocabulary.map((word) => (
           <div
             key={word.french}
-            className="flex justify-between items-center bg-white rounded-lg shadow p-4"
+            className="bg-white rounded-lg shadow p-4"
           >
-            <div>
-              <h3 className="font-semibold text-lg">
+            {/* French word + speaker */}
+            <div className="flex items-center gap-3">
+              <h3 className="font-semibold text-2xl text-slate-800">
                 {word.french}
               </h3>
 
-              <p className="text-gray-600">
-                {word.english}
-              </p>
+              <SpeakerButton text={word.french} />
             </div>
 
-            <PronunciationButton text={word.french} />
+            {/* English meaning */}
+            <p className="text-gray-600 mt-1">
+              {word.english}
+            </p>
           </div>
         ))}
       </div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useSessionStore from "../../store/sessionStore";
+import SpeakButton from "../common/SpeakerButton";
 
 function VocabularySection({ concepts }) {
   const addPerformance = useSessionStore((state) => state.addPerformance);
@@ -23,24 +24,18 @@ function VocabularySection({ concepts }) {
   );
 
   const [currentIndex, setCurrentIndex] = useState(0);
-
   const [isReinforcing, setIsReinforcing] = useState(false);
-
   const [answer, setAnswer] = useState("");
-
   const [attempts, setAttempts] = useState(0);
-
   const [questionStartedAt, setQuestionStartedAt] = useState(Date.now());
-
   const [feedback, setFeedback] = useState(null);
-
   const [isWrong, setIsWrong] = useState(false);
 
   const currentConcept = isReinforcing
     ? reinforcementQueue[0]
     : vocabulary[currentIndex];
 
-  // Reset question state whenever a new question loads
+  // Reset question state
   useEffect(() => {
     setQuestionStartedAt(Date.now());
     setIsWrong(false);
@@ -65,16 +60,15 @@ function VocabularySection({ concepts }) {
     const currentAttempt = attempts + 1;
 
     const normalizedAnswer = normalizeText(answer);
-
     const expectedAnswer = normalizeText(currentConcept.french);
 
     const correct = normalizedAnswer === expectedAnswer;
 
-    const responseTime = Math.round((Date.now() - questionStartedAt) / 1000);
+    const responseTime = Math.round(
+      (Date.now() - questionStartedAt) / 1000,
+    );
 
-    // Record performance — currentConcept already carries french/english/type,
-    // since it comes straight from the concepts array (or the same object
-    // reference pushed into reinforcementQueue), so no re-lookup is needed.
+    // Record performance
     addPerformance({
       questionId: `vocabulary_${currentConcept.conceptId}${
         isReinforcing ? "_reinforcement" : ""
@@ -87,9 +81,11 @@ function VocabularySection({ concepts }) {
       type: currentConcept.type || "vocabulary",
 
       section: "vocabulary",
+
       attempts: currentAttempt,
       correct,
       responseTime,
+
       hintsUsed: 0,
       isReinforcement: isReinforcing,
     });
@@ -103,7 +99,9 @@ function VocabularySection({ concepts }) {
 
       setFeedback({
         type: "correct",
-        message: isReinforcing ? "Nice! You remembered it. 🎉" : "Correct! 🎉",
+        message: isReinforcing
+          ? "Nice! You remembered it. 🎉"
+          : "Correct! 🎉",
       });
 
       setTimeout(() => {
@@ -111,10 +109,7 @@ function VocabularySection({ concepts }) {
         setFeedback(null);
         setAttempts(0);
 
-        // -------------------------
         // Reinforcement question
-        // -------------------------
-
         if (isReinforcing) {
           removeFromReinforcementQueue(currentConcept.conceptId);
 
@@ -128,10 +123,7 @@ function VocabularySection({ concepts }) {
           return;
         }
 
-        // -------------------------
         // Last normal vocabulary question
-        // -------------------------
-
         if (currentIndex >= vocabulary.length - 1) {
           if (reinforcementQueue.length > 0) {
             setIsReinforcing(true);
@@ -139,14 +131,10 @@ function VocabularySection({ concepts }) {
           }
 
           nextSection();
-
           return;
         }
 
-        // -------------------------
         // Next normal question
-        // -------------------------
-
         setCurrentIndex((prev) => prev + 1);
       }, 700);
 
@@ -191,8 +179,11 @@ function VocabularySection({ concepts }) {
         <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wide">
           {isReinforcing ? "Let's try that again" : "Vocabulary"}
         </p>
+
         <h3 className="text-base font-bold text-slate-800">
-          {isReinforcing ? "Can you remember this one?" : "What is this in French?"}
+          {isReinforcing
+            ? "Can you remember this one?"
+            : "What is this in French?"}
         </h3>
       </div>
 
@@ -201,23 +192,35 @@ function VocabularySection({ concepts }) {
       <div
         key={`${currentConcept.conceptId}-${isReinforcing}`}
         className={`bg-white border rounded-2xl shadow-sm p-3 ${
-          isWrong ? "animate-shake border-red-400" : "border-gray-200"
+          isWrong
+            ? "animate-shake border-red-400"
+            : "border-gray-200"
         }`}
         onAnimationEnd={() => setIsWrong(false)}
       >
+
+        {/* ENGLISH QUESTION */}
+
         <div className="text-center">
           <p className="text-base font-semibold text-slate-800">
             {currentConcept.english}
           </p>
-          <p className="text-[10px] text-gray-400">Attempt {attempts + 1}</p>
+
+          <p className="text-[10px] text-gray-400">
+            Attempt {attempts + 1}
+          </p>
         </div>
+
+        {/* ANSWER INPUT */}
 
         <input
           type="text"
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") handleSubmit();
+            if (e.key === "Enter") {
+              handleSubmit();
+            }
           }}
           placeholder="Type your answer in French..."
           className={`w-full mt-2 border rounded-xl px-3 py-1.5 text-sm outline-none transition ${
@@ -230,6 +233,8 @@ function VocabularySection({ concepts }) {
           autoFocus
         />
 
+        {/* CHECK */}
+
         <button
           type="button"
           onClick={handleSubmit}
@@ -238,16 +243,34 @@ function VocabularySection({ concepts }) {
           Check Answer
         </button>
 
+        {/* FEEDBACK */}
+
         <div className="mt-1.5 min-h-[2rem]">
           {feedback && (
             <div
-              className={`p-1.5 rounded-lg text-center font-semibold text-xs ${
+              className={`p-2 rounded-lg text-center text-xs ${
                 feedback.type === "correct"
                   ? "bg-emerald-100 text-emerald-700"
                   : "bg-red-100 text-red-700"
               }`}
             >
-              {feedback.message}
+              {/* MESSAGE */}
+
+              <p className="font-semibold">
+                {feedback.message}
+              </p>
+
+              {/* FRENCH ANSWER + SPEAKER */}
+
+              <div className="flex items-center justify-center gap-2 mt-1">
+                <span className="font-bold text-sm">
+                  {currentConcept.french}
+                </span>
+
+                <SpeakButton
+                  text={currentConcept.french}
+                />
+              </div>
             </div>
           )}
         </div>
@@ -266,7 +289,6 @@ function VocabularySection({ concepts }) {
           Reinforcement round
         </p>
       )}
-
     </div>
   );
 }

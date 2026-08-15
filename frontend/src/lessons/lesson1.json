@@ -14,27 +14,27 @@
     "Say thank you before leaving."
   ],
   "learning": {
-    "order": [
-      "vocabulary",
-      "phrases",
-      "grammar"
-    ],
     "vocabulary": [
       {
         "conceptId": "bonjour",
         "type": "vocabulary",
         "french": "Bonjour",
         "english": "Hello",
-        "explanation": "",
-        "examples": [],
+        "explanation": "A standard greeting used any time before evening.",
+        "examples": [
+          {
+            "french": "Bonjour, Madame.",
+            "english": "Hello, Madam."
+          }
+        ],
         "questions": [
           {
-            "question": "What does 'Bonjour' mean?",
+            "question": "What does \"Bonjour\" mean?",
             "options": [
-              "Hello",
               "Goodbye",
+              "Hello",
               "Coffee",
-              "Please"
+              "Thank you"
             ],
             "correctAnswer": "Hello"
           }
@@ -45,16 +45,21 @@
         "type": "vocabulary",
         "french": "Un café",
         "english": "A coffee",
-        "explanation": "",
-        "examples": [],
+        "explanation": "\"Café\" is a masculine noun, so it takes \"un\".",
+        "examples": [
+          {
+            "french": "Un café, s'il vous plaît.",
+            "english": "A coffee, please."
+          }
+        ],
         "questions": [
           {
-            "question": "What does 'Un café' mean?",
+            "question": "What does \"un café\" mean?",
             "options": [
+              "A tea",
               "A coffee",
               "A baguette",
-              "Goodbye",
-              "Please"
+              "A croissant"
             ],
             "correctAnswer": "A coffee"
           }
@@ -65,18 +70,23 @@
         "type": "vocabulary",
         "french": "Merci",
         "english": "Thank you",
-        "explanation": "",
-        "examples": [],
+        "explanation": "Used to thank someone; add \"beaucoup\" for emphasis.",
+        "examples": [
+          {
+            "french": "Merci beaucoup.",
+            "english": "Thank you very much."
+          }
+        ],
         "questions": [
           {
-            "question": "How do you say 'Thank you' in French?",
+            "question": "What does \"Merci\" mean?",
             "options": [
-              "Bonjour",
-              "Merci",
-              "Au revoir",
-              "S'il vous plaît"
+              "Please",
+              "Thank you",
+              "Hello",
+              "Goodbye"
             ],
-            "correctAnswer": "Merci"
+            "correctAnswer": "Thank you"
           }
         ]
       },
@@ -85,11 +95,16 @@
         "type": "vocabulary",
         "french": "Au revoir",
         "english": "Goodbye",
-        "explanation": "",
-        "examples": [],
+        "explanation": "The standard way to say goodbye.",
+        "examples": [
+          {
+            "french": "Au revoir, à bientôt !",
+            "english": "Goodbye, see you soon!"
+          }
+        ],
         "questions": [
           {
-            "question": "What does 'Au revoir' mean?",
+            "question": "What does \"Au revoir\" mean?",
             "options": [
               "Hello",
               "Please",
@@ -107,18 +122,108 @@
         "type": "phrase",
         "french": "Que désirez-vous ?",
         "english": "What would you like?",
-        "explanation": "",
-        "examples": [],
+        "explanation": "A polite, formal question a server asks a customer.",
+        "examples": [
+          {
+            "french": "Bonjour ! Que désirez-vous ?",
+            "english": "Hello! What would you like?"
+          }
+        ],
         "questions": [
           {
-            "question": "How would a barista ask 'What would you like?'",
+            "question": "Which question means \"What would you like?\"",
             "options": [
-              "Au revoir ?",
               "Que désirez-vous ?",
-              "Merci beaucoup ?",
-              "Bonjour ?"
+              "Comment allez-vous ?",
+              "Où êtes-vous ?",
+              "Qui êtes-vous ?"
             ],
             "correctAnswer": "Que désirez-vous ?"
+          }
+        ]
+      },
+      {
+        "conceptId": "je_voudrais",
+        "type": "phrase",
+        "french": "Je voudrais",
+        "english": "I would like",
+        "explanation": "A polite way to make a request — softer than \"je veux\" (I want).",
+        "examples": [
+          {
+            "french": "Je voudrais un café.",
+            "english": "I would like a coffee."
+          }
+        ],
+        "questions": [
+          {
+            "question": "Which phrase means \"I would like\"?",
+            "options": [
+              "Je suis",
+              "Je vais",
+              "Je voudrais",
+              "Je peux"
+            ],
+            "correctAnswer": "Je voudrais"
+          },
+          {
+            "question": "Complete: ___ un thé, s'il vous plaît.",
+            "options": [
+              "Je voudrais",
+              "Je suis",
+              "Je vais",
+              "Je fais"
+            ],
+            "correctAnswer": "Je voudrais"
+          }
+        ]
+      },
+      {
+        "conceptId": "s_il_vous_plait",
+        "type": "phrase",
+        "french": "S'il vous plaît",
+        "english": "Please",
+        "explanation": "The formal, polite way to say \"please\", usually added at the end of a request.",
+        "examples": [
+          {
+            "french": "Un café, s'il vous plaît.",
+            "english": "A coffee, please."
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"S'il vous plaît\" mean?",
+            "options": [
+              "Thank you",
+              "Please",
+              "Goodbye",
+              "Hello"
+            ],
+            "correctAnswer": "Please"
+          }
+        ]
+      },
+      {
+        "conceptId": "voila_votre_cafe",
+        "type": "phrase",
+        "french": "Voilà votre café",
+        "english": "Here is your coffee",
+        "explanation": "What a barista says while handing over your order.",
+        "examples": [
+          {
+            "french": "Très bien. Voilà votre café.",
+            "english": "Very good. Here is your coffee."
+          }
+        ],
+        "questions": [
+          {
+            "question": "Which phrase means \"Here is your coffee\"?",
+            "options": [
+              "Voilà votre café",
+              "Voilà votre addition",
+              "Où est le café ?",
+              "C'est votre café"
+            ],
+            "correctAnswer": "Voilà votre café"
           }
         ]
       },
@@ -127,11 +232,11 @@
         "type": "phrase",
         "french": "Je voudrais un café, s'il vous plaît.",
         "english": "I would like a coffee, please.",
-        "explanation": "",
+        "explanation": "A complete polite way to order a coffee.",
         "examples": [],
         "questions": [
           {
-            "question": "How do you politely say 'I would like a coffee, please'?",
+            "question": "How do you politely say \"I would like a coffee, please\"?",
             "options": [
               "Je suis un café.",
               "Je voudrais un café, s'il vous plaît.",
@@ -141,86 +246,24 @@
             "correctAnswer": "Je voudrais un café, s'il vous plaît."
           }
         ]
-      },
-      {
-        "conceptId": "s_il_vous_plait",
-        "type": "phrase",
-        "french": "S'il vous plaît",
-        "english": "Please",
-        "explanation": "",
-        "examples": [],
-        "questions": [
-          {
-            "question": "What does 'S'il vous plaît' mean?",
-            "options": [
-              "Thank you",
-              "Please",
-              "Hello",
-              "Goodbye"
-            ],
-            "correctAnswer": "Please"
-          }
-        ]
       }
     ],
     "grammar": [
       {
-        "conceptId": "je_voudrais",
-        "type": "grammar",
-        "french": "Je voudrais",
-        "english": "I would like",
-        "explanation": "A polite way to say 'I would like'.",
-        "examples": [],
-        "questions": [
-          {
-            "question": "Je ___ un café.",
-            "options": [
-              "suis",
-              "voudrais",
-              "vais",
-              "peux"
-            ],
-            "correctAnswer": "voudrais"
-          },
-          {
-            "question": "Which sentence politely means 'I would like a coffee'?",
-            "options": [
-              "Je suis un café.",
-              "Je vais un café.",
-              "Je voudrais un café.",
-              "Je peux un café."
-            ],
-            "correctAnswer": "Je voudrais un café."
-          },
-          {
-            "question": "___ un thé, s'il vous plaît.",
-            "options": [
-              "Je voudrais",
-              "Je suis",
-              "Je vais",
-              "Je fais"
-            ],
-            "correctAnswer": "Je voudrais"
-          },
-          {
-            "question": "'Je voudrais' is more polite than which phrase?",
-            "options": [
-              "Je veux",
-              "Merci",
-              "Bonjour",
-              "Au revoir"
-            ],
-            "correctAnswer": "Je veux"
-          }
-        ]
-      },
-      {
         "conceptId": "un_une",
         "type": "grammar",
-        "french": "Un / Une",
-        "english": "A / An",
-        "explanation": "French nouns usually require an article before them.",
-        "examples": [],
+        "title": "Un / Une",
+        "explanation": "\"Un\" goes with masculine nouns, \"une\" with feminine nouns. \"Café\" is masculine, so it's \"un café\".",
+        "examples": [
+          {
+            "french": "un café",
+            "english": "a coffee"
+          },
+          {
+            "french": "une baguette",
+            "english": "a baguette"
+          }
+        ],
         "questions": [
           {
             "question": "___ café",
@@ -233,27 +276,7 @@
             "correctAnswer": "Un"
           },
           {
-            "question": "___ baguette",
-            "options": [
-              "Un",
-              "Une",
-              "Des",
-              "Le"
-            ],
-            "correctAnswer": "Une"
-          },
-          {
-            "question": "___ thé (tea)",
-            "options": [
-              "Un",
-              "Une",
-              "Des",
-              "La"
-            ],
-            "correctAnswer": "Un"
-          },
-          {
-            "question": "Which article goes with a masculine noun like 'café'?",
+            "question": "Which article goes with a masculine noun like \"café\"?",
             "options": [
               "Une",
               "Un",
@@ -263,168 +286,179 @@
             "correctAnswer": "Un"
           }
         ]
+      },
+      {
+        "conceptId": "polite_request",
+        "type": "grammar",
+        "title": "Polite request construction",
+        "explanation": "Combine \"Je voudrais\" + the item + \"s'il vous plaît\" to make a fully polite request.",
+        "examples": [
+          {
+            "french": "Je voudrais un café, s'il vous plaît.",
+            "english": "I would like a coffee, please."
+          }
+        ],
+        "questions": [
+          {
+            "question": "Which sentence is the most polite way to order?",
+            "options": [
+              "Café.",
+              "Je voudrais un café, s'il vous plaît.",
+              "Donnez-moi un café.",
+              "Café maintenant."
+            ],
+            "correctAnswer": "Je voudrais un café, s'il vous plaît."
+          }
+        ]
       }
+    ],
+    "order": [
+      "vocabulary",
+      "phrases",
+      "grammar"
     ]
   },
-  "concepts": [
-    {
-      "conceptId": "bonjour",
-      "type": "vocabulary",
-      "french": "Bonjour",
-      "english": "Hello"
-    },
-    {
-      "conceptId": "un_cafe",
-      "type": "vocabulary",
-      "french": "Un café",
-      "english": "A coffee"
-    },
-    {
-      "conceptId": "merci",
-      "type": "vocabulary",
-      "french": "Merci",
-      "english": "Thank you"
-    },
-    {
-      "conceptId": "je_voudrais",
-      "type": "grammar",
-      "french": "Je voudrais",
-      "english": "I would like",
-      "explanation": "A polite way to say 'I would like'.",
-      "questions": [
-        {
-          "question": "Je ___ un café.",
-          "options": [
-            "suis",
-            "voudrais",
-            "vais",
-            "peux"
-          ],
-          "correctAnswer": "voudrais"
-        },
-        {
-          "question": "Which sentence politely means 'I would like a coffee'?",
-          "options": [
-            "Je suis un café.",
-            "Je vais un café.",
-            "Je voudrais un café.",
-            "Je peux un café."
-          ],
-          "correctAnswer": "Je voudrais un café."
-        },
-        {
-          "question": "___ un thé, s'il vous plaît.",
-          "options": [
-            "Je voudrais",
-            "Je suis",
-            "Je vais",
-            "Je fais"
-          ],
-          "correctAnswer": "Je voudrais"
-        },
-        {
-          "question": "'Je voudrais' is more polite than which phrase?",
-          "options": [
-            "Je veux",
-            "Merci",
-            "Bonjour",
-            "Au revoir"
-          ],
-          "correctAnswer": "Je veux"
-        }
-      ]
-    },
-    {
-      "conceptId": "un_une",
-      "type": "grammar",
-      "french": "Un / Une",
-      "english": "A / An",
-      "explanation": "French nouns usually require an article before them.",
-      "questions": [
-        {
-          "question": "___ café",
-          "options": [
-            "Une",
-            "Un",
-            "Des",
-            "La"
-          ],
-          "correctAnswer": "Un"
-        },
-        {
-          "question": "___ baguette",
-          "options": [
-            "Un",
-            "Une",
-            "Des",
-            "Le"
-          ],
-          "correctAnswer": "Une"
-        },
-        {
-          "question": "___ thé (tea)",
-          "options": [
-            "Un",
-            "Une",
-            "Des",
-            "La"
-          ],
-          "correctAnswer": "Un"
-        },
-        {
-          "question": "Which article goes with a masculine noun like 'café'?",
-          "options": [
-            "Une",
-            "Un",
-            "La",
-            "Les"
-          ],
-          "correctAnswer": "Un"
-        }
-      ]
-    },
-    {
-      "conceptId": "que_desirez_vous",
-      "type": "sentence",
-      "french": "Que désirez-vous ?",
-      "english": "What would you like?"
-    },
-    {
-      "conceptId": "je_voudrais_un_cafe_phrase",
-      "type": "sentence",
-      "french": "Je voudrais un café, s'il vous plaît.",
-      "english": "I would like a coffee, please."
-    },
-    {
-      "conceptId": "s_il_vous_plait",
-      "type": "expression",
-      "french": "S'il vous plaît",
-      "english": "Please"
-    },
-    {
-      "conceptId": "au_revoir",
-      "type": "vocabulary",
-      "french": "Au revoir",
-      "english": "Goodbye"
-    }
-  ],
-  "writtenNotes": {
-    "tasks": [
+  "practice": {
+    "sentenceRecall": [
       {
-        "id": "written_1",
-        "english": "I would like a coffee, please.",
-        "answer": "Je voudrais un café, s'il vous plaît.",
-        "conceptIds": [
+        "id": "recall_1",
+        "type": "sentenceRecall",
+        "prompt": "Translate: \"I would like a coffee.\"",
+        "expectedAnswer": "Je voudrais un café.",
+        "acceptedAnswers": [
+          "Je voudrais un café.",
+          "Je voudrais un cafe."
+        ],
+        "targetConcepts": [
           "je_voudrais",
-          "cafe"
+          "un_cafe"
         ]
       },
       {
-        "id": "written_2",
-        "english": "Thank you very much.",
-        "answer": "Merci beaucoup.",
-        "conceptIds": [
+        "id": "recall_2",
+        "type": "sentenceRecall",
+        "prompt": "Complete: \"Je ___ un café, s'il vous plaît.\"",
+        "expectedAnswer": "voudrais",
+        "acceptedAnswers": [
+          "voudrais"
+        ],
+        "targetConcepts": [
+          "je_voudrais"
+        ]
+      },
+      {
+        "id": "recall_3",
+        "type": "sentenceRecall",
+        "prompt": "Translate: \"What would you like?\"",
+        "expectedAnswer": "Que désirez-vous ?",
+        "acceptedAnswers": [
+          "Que désirez-vous ?",
+          "Que désirez-vous?"
+        ],
+        "targetConcepts": [
+          "que_desirez_vous"
+        ]
+      },
+      {
+        "id": "recall_4",
+        "type": "sentenceRecall",
+        "prompt": "Fill in the article: \"___ café\"",
+        "expectedAnswer": "Un",
+        "acceptedAnswers": [
+          "Un",
+          "un"
+        ],
+        "targetConcepts": [
+          "un_une",
+          "un_cafe"
+        ]
+      }
+    ],
+    "writing": [
+      {
+        "id": "write_1",
+        "type": "writing",
+        "prompt": "Translate: \"I would like a coffee.\"",
+        "english": "I would like a coffee.",
+        "expectedAnswer": "Je voudrais un café.",
+        "acceptedAnswers": [
+          "Je voudrais un café.",
+          "Je voudrais un cafe."
+        ],
+        "targetConcepts": [
+          "je_voudrais",
+          "un_cafe"
+        ]
+      },
+      {
+        "id": "write_2",
+        "type": "writing",
+        "prompt": "Translate: \"Thank you.\"",
+        "english": "Thank you.",
+        "expectedAnswer": "Merci.",
+        "acceptedAnswers": [
+          "Merci.",
+          "Merci"
+        ],
+        "targetConcepts": [
           "merci"
+        ]
+      },
+      {
+        "id": "write_3",
+        "type": "writing",
+        "prompt": "Translate: \"A coffee, please.\"",
+        "english": "A coffee, please.",
+        "expectedAnswer": "Un café, s'il vous plaît.",
+        "acceptedAnswers": [
+          "Un café, s'il vous plaît.",
+          "Un cafe, s'il vous plait."
+        ],
+        "targetConcepts": [
+          "un_cafe",
+          "s_il_vous_plait"
+        ]
+      }
+    ],
+    "speaking": [
+      {
+        "id": "speak_1",
+        "prompt": "Say: I would like a coffee, please.",
+        "expectedAnswer": "Je voudrais un café, s'il vous plaît.",
+        "acceptedAnswers": [
+          "Je voudrais un café.",
+          "Je voudrais un café, s'il vous plaît.",
+          "Je voudrais un cafe.",
+          "Je voudrais un cafe, s'il vous plait."
+        ],
+        "targetConcepts": [
+          "je_voudrais",
+          "un_cafe",
+          "s_il_vous_plait"
+        ]
+      },
+      {
+        "id": "speak_2",
+        "prompt": "Say: Thank you.",
+        "expectedAnswer": "Merci.",
+        "acceptedAnswers": [
+          "Merci.",
+          "Merci"
+        ],
+        "targetConcepts": [
+          "merci"
+        ]
+      },
+      {
+        "id": "speak_3",
+        "prompt": "Say: Goodbye.",
+        "expectedAnswer": "Au revoir.",
+        "acceptedAnswers": [
+          "Au revoir.",
+          "Au revoir"
+        ],
+        "targetConcepts": [
+          "au_revoir"
         ]
       }
     ]
@@ -435,434 +469,141 @@
       {
         "id": "vocabulary",
         "label": "Vocabulary",
-        "timeLimitSeconds": 90
-      },
-      {
-        "id": "phrases",
-        "label": "Useful Phrases",
-        "timeLimitSeconds": 90
+        "timeLimitSeconds": 100
       },
       {
         "id": "grammar",
         "label": "Grammar",
-        "timeLimitSeconds": 120
+        "timeLimitSeconds": 100
       },
       {
         "id": "sentenceRecall",
         "label": "Sentence Recall",
-        "timeLimitSeconds": 120
+        "timeLimitSeconds": 100
       },
       {
-        "id": "writtenNotes",
-        "label": "Write And Remember",
+        "id": "handwriting",
+        "label": "Write It",
         "timeLimitSeconds": 90
       },
       {
         "id": "speaking",
         "label": "Speak It",
-        "timeLimitSeconds": 90
+        "timeLimitSeconds": 105
       },
       {
         "id": "mission",
         "label": "Your Mission",
-        "timeLimitSeconds": 90
+        "timeLimitSeconds": 105
       }
     ]
   },
   "mission": {
     "title": "Your Mission",
-    "scenario": "You are ordering coffee at a French café. Use what you learned to complete the conversation.",
-    "instructions": "Listen carefully, understand the situation, and choose the most natural response.",
+    "scenario": "You are ordering coffee at a French café. Complete the conversation naturally.",
+    "instructions": "Respond naturally in French using the words and phrases you learned in this lesson.",
     "selection": {
-      "minTurns": 4,
+      "minTurns": 3,
       "maxTurns": 4,
       "prioritizeWeakConcepts": true,
-      "includeListening": true,
       "includeNormalTurns": true,
       "includeChallengeTurn": true
     },
     "turns": [
       {
-        "id": "mission_listening",
-        "type": "listening",
-        "difficulty": "medium",
-        "speaker": "Barista",
-        "audioText": "Bonjour ! Vous voulez un café ou un thé ?",
-        "question": "What is the barista asking you?",
-        "options": [
-          "What would you like to drink?",
-          "Where are you going?",
-          "How much is the coffee?",
-          "Are you leaving?"
-        ],
-        "correctAnswer": 0,
-        "targetConcepts": [
-          "bonjour",
-          "un_cafe",
-          "que_desirez_vous"
-        ]
-      },
-      {
-        "id": "mission_polite_response",
-        "type": "multiple_choice",
+        "id": "order_coffee",
+        "type": "order",
         "difficulty": "medium",
         "speaker": "Barista",
         "french": "Bonjour ! Que désirez-vous ?",
         "english": "Hello! What would you like?",
-        "question": "You want one coffee and want to ask politely. What is the best response?",
-        "options": [
-          "Bonjour, je voudrais un café, s'il vous plaît.",
-          "Bonjour, je veux une café.",
-          "Merci, au revoir.",
-          "Je suis un café."
-        ],
-        "correctAnswer": 0,
         "targetConcepts": [
           "bonjour",
+          "que_desirez_vous",
           "je_voudrais",
-          "un_une",
           "un_cafe",
-          "s_il_vous_plait"
-        ]
-      },
-      {
-        "id": "mission_conversation",
-        "type": "multiple_choice",
-        "difficulty": "medium",
-        "speaker": "Barista",
-        "french": "Très bien. Voilà votre café.",
-        "english": "Very good. Here is your coffee.",
-        "question": "What would you naturally say now?",
-        "options": [
-          "Merci.",
-          "Que désirez-vous ?",
+          "je_voudrais_un_cafe_phrase"
+        ],
+        "acceptedAnswers": [
           "Je voudrais un café.",
-          "Bonjour !"
-        ],
-        "correctAnswer": 0,
-        "targetConcepts": [
-          "merci",
-          "un_cafe"
+          "Je voudrais un café, s'il vous plaît.",
+          "Je voudrais un cafe.",
+          "Je voudrais un cafe, s'il vous plait."
         ]
       },
       {
-        "id": "mission_full_challenge",
-        "type": "multiple_choice",
-        "difficulty": "hard",
+        "id": "polite_confirm",
+        "type": "politeness",
+        "difficulty": "easy",
         "speaker": "Barista",
-        "french": "Bonjour ! Que désirez-vous ?",
-        "english": "Hello! What would you like?",
-        "question": "Which response naturally combines the greeting, polite request, correct article, drink, and polite expression?",
-        "options": [
-          "Bonjour, je voudrais un café, s'il vous plaît.",
-          "Bonjour, je voudrais une café, merci.",
-          "Au revoir, je voudrais un café.",
-          "Merci, que désirez-vous ?"
-        ],
-        "correctAnswer": 0,
+        "french": "Un café pour vous ?",
+        "english": "A coffee for you?",
         "targetConcepts": [
-          "bonjour",
-          "je_voudrais",
-          "un_une",
           "un_cafe",
           "s_il_vous_plait"
+        ],
+        "acceptedAnswers": [
+          "Un café, s'il vous plaît.",
+          "Oui, un café, s'il vous plaît.",
+          "Un cafe, s'il vous plait.",
+          "Oui, un cafe, s'il vous plait."
         ]
       },
       {
-        "id": "mission_goodbye",
-        "type": "multiple_choice",
+        "id": "receive_coffee",
+        "type": "thank",
+        "difficulty": "easy",
+        "speaker": "Barista",
+        "french": "Voilà votre café.",
+        "english": "Here is your coffee.",
+        "targetConcepts": [
+          "voila_votre_cafe",
+          "merci"
+        ],
+        "acceptedAnswers": [
+          "Merci.",
+          "Merci !",
+          "Merci beaucoup."
+        ]
+      },
+      {
+        "id": "goodbye",
+        "type": "goodbye",
         "difficulty": "easy",
         "speaker": "Barista",
         "french": "Merci ! Au revoir !",
         "english": "Thank you! Goodbye!",
-        "question": "How would you naturally end the conversation?",
-        "options": [
-          "Merci, au revoir.",
-          "Je voudrais un café.",
-          "Bonjour, merci.",
-          "Que désirez-vous ?"
-        ],
-        "correctAnswer": 0,
         "targetConcepts": [
-          "merci",
           "au_revoir"
+        ],
+        "acceptedAnswers": [
+          "Au revoir.",
+          "Au revoir !"
+        ]
+      },
+      {
+        "id": "full_order_challenge",
+        "type": "order",
+        "difficulty": "hard",
+        "speaker": "Barista",
+        "french": "Bonjour ! Que désirez-vous ?",
+        "english": "Hello! What would you like?",
+        "targetConcepts": [
+          "bonjour",
+          "que_desirez_vous",
+          "je_voudrais",
+          "un_cafe",
+          "s_il_vous_plait",
+          "polite_request",
+          "je_voudrais_un_cafe_phrase"
+        ],
+        "acceptedAnswers": [
+          "Je voudrais un café, s'il vous plaît.",
+          "Je voudrais un cafe, s'il vous plait."
         ]
       }
     ]
   },
-  "vocabulary": [
-    {
-      "french": "Bonjour",
-      "english": "Hello"
-    },
-    {
-      "french": "Un café",
-      "english": "A coffee"
-    },
-    {
-      "french": "Merci",
-      "english": "Thank you"
-    },
-    {
-      "french": "Au revoir",
-      "english": "Goodbye"
-    },
-    {
-      "french": "S'il vous plaît",
-      "english": "Please"
-    }
-  ],
-  "dialogue": [
-    {
-      "speaker": "Customer",
-      "french": "Bonjour.",
-      "english": "Hello."
-    },
-    {
-      "speaker": "Barista",
-      "french": "Bonjour, que désirez-vous ?",
-      "english": "Hello, what would you like?"
-    },
-    {
-      "speaker": "Customer",
-      "french": "Je voudrais un café, s'il vous plaît.",
-      "english": "I would like a coffee, please."
-    },
-    {
-      "speaker": "Barista",
-      "french": "Très bien.",
-      "english": "Certainly."
-    },
-    {
-      "speaker": "Customer",
-      "french": "Merci.",
-      "english": "Thank you."
-    },
-    {
-      "speaker": "Barista",
-      "french": "Au revoir !",
-      "english": "Goodbye!"
-    }
-  ],
-  "grammar": [
-    {
-      "title": "Je voudrais",
-      "explanation": "A polite way to say 'I would like'."
-    },
-    {
-      "title": "Un / Une",
-      "explanation": "French nouns usually require an article before them."
-    }
-  ],
-  "practice": [
-    {
-      "id": 1,
-      "question": "Translate: Hello",
-      "answer": "Bonjour"
-    },
-    {
-      "id": 2,
-      "question": "Translate: Thank you",
-      "answer": "Merci"
-    },
-    {
-      "id": 3,
-      "question": "Translate: Goodbye",
-      "answer": "Au revoir"
-    },
-    {
-      "id": 4,
-      "question": "Translate: Please",
-      "answer": "S'il vous plaît"
-    },
-    {
-      "id": 5,
-      "question": "Translate: I would like a coffee.",
-      "answer": "Je voudrais un café."
-    },
-    {
-      "id": 6,
-      "question": "Translate: A coffee, please.",
-      "answer": "Un café, s'il vous plaît."
-    },
-    {
-      "id": 7,
-      "question": "Fill in the article: ___ café",
-      "answer": "Un café"
-    },
-    {
-      "id": 8,
-      "question": "Translate: What would you like?",
-      "answer": "Que désirez-vous ?"
-    },
-    {
-      "id": 9,
-      "question": "Complete politely: Je ___ un café, s'il vous plaît.",
-      "answer": "voudrais"
-    },
-    {
-      "id": 10,
-      "question": "Translate: Hello! I would like a coffee, please.",
-      "answer": "Bonjour ! Je voudrais un café, s'il vous plaît."
-    }
-  ],
-  "speaking": [
-    {
-      "id": "speak_1",
-      "question": "Hello",
-      "answer": "Bonjour",
-      "acceptedAnswers": [
-        "Bonjour",
-        "Bonjour !"
-      ],
-      "conceptId": "bonjour"
-    },
-    {
-      "id": "speak_2",
-      "question": "Thank you",
-      "answer": "Merci",
-      "acceptedAnswers": [
-        "Merci",
-        "Merci !",
-        "Merci beaucoup"
-      ],
-      "conceptId": "merci"
-    },
-    {
-      "id": "speak_3",
-      "question": "I would like a coffee, please.",
-      "answer": "Je voudrais un café, s'il vous plaît.",
-      "acceptedAnswers": [
-        "Je voudrais un café, s'il vous plaît.",
-        "Je voudrais un cafe, s'il vous plait.",
-        "Je voudrais un café.",
-        "Je voudrais un cafe."
-      ],
-      "conceptId": "je_voudrais"
-    },
-    {
-      "id": "speak_4",
-      "question": "Goodbye",
-      "answer": "Au revoir",
-      "acceptedAnswers": [
-        "Au revoir",
-        "Au revoir !"
-      ],
-      "conceptId": "au_revoir"
-    }
-  ],
-  "quiz": [
-    {
-      "id": 1,
-      "question": "What does 'Bonjour' mean?",
-      "options": [
-        "Hello",
-        "Goodbye",
-        "Coffee",
-        "Please"
-      ],
-      "correctAnswer": 0
-    },
-    {
-      "id": 2,
-      "question": "How do you say 'Thank you' in French?",
-      "options": [
-        "Bonjour",
-        "Merci",
-        "Bonsoir",
-        "Au revoir"
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "id": 3,
-      "question": "How do you politely say 'I would like'?",
-      "options": [
-        "Je suis",
-        "Je vais",
-        "Je voudrais",
-        "Je peux"
-      ],
-      "correctAnswer": 2
-    },
-    {
-      "id": 4,
-      "question": "Which article is correct before 'café'?",
-      "options": [
-        "Une",
-        "Un",
-        "La",
-        "Des"
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "id": 5,
-      "question": "What does 'Au revoir' mean?",
-      "options": [
-        "Please",
-        "Thank you",
-        "Goodbye",
-        "Hello"
-      ],
-      "correctAnswer": 2
-    },
-    {
-      "id": 6,
-      "question": "What does 'S'il vous plaît' mean?",
-      "options": [
-        "Thank you",
-        "Please",
-        "Hello",
-        "Goodbye"
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "id": 7,
-      "question": "How would a barista ask 'What would you like?'",
-      "options": [
-        "Au revoir ?",
-        "Que désirez-vous ?",
-        "Merci beaucoup ?",
-        "Bonjour ?"
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "id": 8,
-      "question": "Which sentence correctly orders a coffee politely?",
-      "options": [
-        "Café voudrais je.",
-        "Je voudrais un café, s'il vous plaît.",
-        "Un café merci vous.",
-        "Voudrais café un je."
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "id": 9,
-      "question": "Complete: '___ café, s'il vous plaît.'",
-      "options": [
-        "Une",
-        "Un",
-        "Des",
-        "La"
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "id": 10,
-      "question": "What is the most natural way to end the café conversation?",
-      "options": [
-        "Bonjour, au revoir.",
-        "Merci, au revoir.",
-        "Je voudrais, merci.",
-        "Un café, bonjour."
-      ],
-      "correctAnswer": 1
-    }
-  ],
   "ai": {
     "name": "Barista",
     "role": "French café barista",
@@ -871,3 +612,4 @@
     "englishAllowed": false
   }
 }
+

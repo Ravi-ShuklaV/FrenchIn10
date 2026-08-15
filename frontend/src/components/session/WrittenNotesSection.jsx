@@ -1,13 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 
-function WrittenNotesSection({
-  lesson,
-  onComplete,
-}) {
+function WrittenNotesSection({ lesson, onComplete }) {
+  const contentRef = useRef(null);
   const actionRef = useRef(null);
 
-  const tasks =
-    lesson?.writtenNotes?.tasks || [];
+  // ==========================================
+  // NEW LESSON JSON
+  //
+  // lesson.practice.writing[]
+  // ==========================================
+
+  const tasks = Array.isArray(lesson?.practice?.writing)
+    ? lesson.practice.writing
+    : [];
 
   const [stage, setStage] = useState("intro");
   const [taskIndex, setTaskIndex] = useState(0);
@@ -21,45 +26,40 @@ function WrittenNotesSection({
   const [photoPreview, setPhotoPreview] =
     useState(null);
 
-  // =========================
-  // SMOOTHLY SHOW NEW STAGE
-  // =========================
+  // ==========================================
+  // SCROLL WHEN STAGE CHANGES
+  // ==========================================
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      const element = actionRef.current;
-
-      if (!element) return;
-
-      // First move the viewport smoothly
-      // to the useful interactive area.
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "nearest",
-      });
-
-      // Then focus it WITHOUT causing
-      // another browser scroll.
-      requestAnimationFrame(() => {
-        try {
-          element.focus({
-            preventScroll: true,
-          });
-        } catch {
-          element.focus();
-        }
-      });
-    }, 50);
-
-    return () => {
-      window.clearTimeout(timer);
-    };
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }, [stage, taskIndex]);
 
-  // =========================
-  // CLEANUP PHOTO PREVIEW
-  // =========================
+  // ==========================================
+  // FOCUS ACTION
+  // ==========================================
+
+  useEffect(() => {
+    if (!actionRef.current) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      try {
+        actionRef.current.focus({
+          preventScroll: true,
+        });
+      } catch {
+        actionRef.current.focus();
+      }
+    });
+  }, [stage, taskIndex]);
+
+  // ==========================================
+  // CLEAN PHOTO PREVIEW
+  // ==========================================
 
   useEffect(() => {
     return () => {
@@ -69,20 +69,19 @@ function WrittenNotesSection({
     };
   }, [photoPreview]);
 
-  const currentTask =
-    tasks[taskIndex];
+  const currentTask = tasks[taskIndex];
 
-  // =========================
+  // ==========================================
   // SKIP
-  // =========================
+  // ==========================================
 
   function skipSection() {
     onComplete();
   }
 
-  // =========================
+  // ==========================================
   // START
-  // =========================
+  // ==========================================
 
   function startSection() {
     if (!tasks.length) {
@@ -94,65 +93,59 @@ function WrittenNotesSection({
     setStage("task");
   }
 
-  // =========================
+  // ==========================================
   // FINISH PAPER TASK
-  // =========================
+  // ==========================================
 
   function finishTask() {
     setStage("reveal");
   }
 
-  // =========================
+  // ==========================================
   // NEXT TASK
-  // =========================
+  // ==========================================
 
   function nextTask() {
     if (taskIndex < tasks.length - 1) {
-      setTaskIndex(
-        (previous) => previous + 1
-      );
-
+      setTaskIndex((previous) => previous + 1);
       setStage("task");
-
       return;
     }
 
     setStage("original");
   }
 
-  // =========================
-  // ORIGINAL SENTENCE
-  // =========================
+  // ==========================================
+  // ORIGINAL SENTENCE WRITTEN
+  // ==========================================
 
   function handleOriginalWritten() {
     setOriginalWritten(true);
     setStage("save");
   }
 
-  // =========================
+  // ==========================================
   // PHOTO SELECTED
-  // =========================
+  // ==========================================
 
   function handlePhotoChange(event) {
-    const file =
-      event.target.files?.[0];
+    const file = event.target.files?.[0];
 
-    if (!file) return;
+    if (!file) {
+      return;
+    }
 
     if (photoPreview) {
       URL.revokeObjectURL(photoPreview);
     }
 
     setPhotoFile(file);
-
-    setPhotoPreview(
-      URL.createObjectURL(file)
-    );
+    setPhotoPreview(URL.createObjectURL(file));
   }
 
-  // =========================
+  // ==========================================
   // SAVE PHOTO
-  // =========================
+  // ==========================================
 
   function savePhoto() {
     if (!photoFile) {
@@ -161,8 +154,7 @@ function WrittenNotesSection({
     }
 
     try {
-      const reader =
-        new FileReader();
+      const reader = new FileReader();
 
       reader.onload = () => {
         const savedPhoto = {
@@ -201,9 +193,9 @@ function WrittenNotesSection({
     }
   }
 
-  // =========================
+  // ==========================================
   // SKIP PHOTO
-  // =========================
+  // ==========================================
 
   function skipPhoto() {
     localStorage.setItem(
@@ -218,44 +210,50 @@ function WrittenNotesSection({
     onComplete();
   }
 
-  // =========================
+  // ==========================================
   // EMPTY STATE
-  // =========================
+  // ==========================================
 
   if (!tasks.length) {
     return (
-      <div className="max-w-3xl mx-auto text-center py-12">
+      <div
+        ref={contentRef}
+        className="max-w-3xl mx-auto text-center py-12"
+      >
+        <p className="text-sm text-emerald-600 font-semibold uppercase tracking-wide">
+          Write It
+        </p>
 
-        <h2 className="text-3xl font-bold text-slate-800">
-          Write & Remember
+        <h2 className="text-3xl font-bold text-slate-800 mt-2">
+          Nothing to write yet
         </h2>
 
         <p className="text-gray-500 mt-3">
-          No writing tasks are configured
-          for this lesson yet.
+          This lesson does not have any writing
+          exercises configured.
         </p>
 
         <button
-          ref={actionRef}
           type="button"
           onClick={onComplete}
           className="mt-6 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3 rounded-xl"
         >
           Continue →
         </button>
-
       </div>
     );
   }
 
-  // =========================
+  // ==========================================
   // INTRO
-  // =========================
+  // ==========================================
 
   if (stage === "intro") {
     return (
-      <div className="max-w-3xl mx-auto">
-
+      <div
+        ref={contentRef}
+        className="max-w-3xl mx-auto"
+      >
         <div className="text-center">
 
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 text-sm font-semibold">
@@ -270,7 +268,6 @@ function WrittenNotesSection({
           <p className="text-gray-500 mt-3 text-lg">
             No notes. No hints. Just you and your memory.
           </p>
-
         </div>
 
         <div className="relative mt-10">
@@ -282,8 +279,6 @@ function WrittenNotesSection({
             <div className="h-1.5 bg-emerald-500" />
 
             <div className="p-8 md:p-10">
-
-              {/* PAPER MESSAGE */}
 
               <div className="flex items-start gap-4 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 rounded-2xl p-5">
 
@@ -305,8 +300,6 @@ function WrittenNotesSection({
 
               </div>
 
-              {/* CHALLENGE */}
-
               <div className="mt-9">
 
                 <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-5">
@@ -314,6 +307,8 @@ function WrittenNotesSection({
                 </p>
 
                 <div className="space-y-4">
+
+                  {/* STEP 1 */}
 
                   <div className="flex gap-4 items-center">
 
@@ -323,7 +318,7 @@ function WrittenNotesSection({
 
                     <div>
                       <p className="font-semibold text-slate-800">
-                        Recall two sentences
+                        Recall {tasks.length === 1 ? "the sentence" : `${tasks.length} sentences`}
                       </p>
 
                       <p className="text-sm text-gray-500">
@@ -334,6 +329,8 @@ function WrittenNotesSection({
                   </div>
 
                   <div className="ml-5 h-3 border-l border-dashed border-gray-200" />
+
+                  {/* STEP 2 */}
 
                   <div className="flex gap-4 items-center">
 
@@ -355,6 +352,8 @@ function WrittenNotesSection({
 
                   <div className="ml-5 h-3 border-l border-dashed border-gray-200" />
 
+                  {/* STEP 3 */}
+
                   <div className="flex gap-4 items-center">
 
                     <div className="flex-shrink-0 w-10 h-10 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center font-bold">
@@ -375,6 +374,8 @@ function WrittenNotesSection({
 
                   <div className="ml-5 h-3 border-l border-dashed border-gray-200" />
 
+                  {/* STEP 4 */}
+
                   <div className="flex gap-4 items-center">
 
                     <div className="flex-shrink-0 w-10 h-10 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center font-bold">
@@ -394,25 +395,16 @@ function WrittenNotesSection({
                   </div>
 
                 </div>
-
               </div>
 
-              {/* REASSURANCE */}
-
               <div className="mt-9 flex items-center justify-center gap-2 text-sm text-gray-400">
-
                 <span>🔓</span>
-
                 <span>
                   No grades. No pressure. Just practice.
                 </span>
-
               </div>
 
-              {/* CTA */}
-
               <button
-                ref={actionRef}
                 type="button"
                 onClick={startSection}
                 className="group w-full mt-7 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-4 rounded-2xl transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5"
@@ -435,25 +427,22 @@ function WrittenNotesSection({
               </button>
 
             </div>
-
           </div>
-
         </div>
-
       </div>
     );
   }
 
-  // =========================
+  // ==========================================
   // PAPER TASK
-  // =========================
+  // ==========================================
 
-  if (
-    stage === "task" &&
-    currentTask
-  ) {
+  if (stage === "task" && currentTask) {
     return (
-      <div className="max-w-3xl mx-auto">
+      <div
+        ref={contentRef}
+        className="max-w-3xl mx-auto"
+      >
 
         <div className="text-center mb-8">
 
@@ -462,8 +451,7 @@ function WrittenNotesSection({
           </p>
 
           <h2 className="text-3xl font-bold text-slate-800 mt-2">
-            Sentence {taskIndex + 1} of{" "}
-            {tasks.length}
+            Sentence {taskIndex + 1} of {tasks.length}
           </h2>
 
           <p className="text-gray-500 mt-3">
@@ -482,7 +470,8 @@ function WrittenNotesSection({
             </p>
 
             <p className="text-2xl font-bold text-slate-800 mt-5">
-              {currentTask.english}
+              {currentTask.english ||
+                currentTask.prompt}
             </p>
 
           </div>
@@ -490,7 +479,6 @@ function WrittenNotesSection({
           <div className="mt-7">
 
             <button
-              ref={actionRef}
               type="button"
               onClick={finishTask}
               className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition"
@@ -507,23 +495,21 @@ function WrittenNotesSection({
             </button>
 
           </div>
-
         </div>
-
       </div>
     );
   }
 
-  // =========================
-  // REVEAL
-  // =========================
+  // ==========================================
+  // REVEAL ANSWER
+  // ==========================================
 
-  if (
-    stage === "reveal" &&
-    currentTask
-  ) {
+  if (stage === "reveal" && currentTask) {
     return (
-      <div className="max-w-3xl mx-auto">
+      <div
+        ref={contentRef}
+        className="max-w-3xl mx-auto"
+      >
 
         <div className="text-center mb-8">
 
@@ -550,17 +536,46 @@ function WrittenNotesSection({
             </p>
 
             <p className="text-2xl font-bold text-slate-800 mt-4">
-              {currentTask.answer}
+              {currentTask.expectedAnswer}
             </p>
 
           </div>
+
+          {/* ACCEPTED ALTERNATIVES */}
+
+          {Array.isArray(currentTask.acceptedAnswers) &&
+            currentTask.acceptedAnswers.length > 1 && (
+              <div className="mt-5 text-center">
+
+                <p className="text-xs text-gray-400 uppercase tracking-wide">
+                  Also accepted
+                </p>
+
+                <div className="mt-2 space-y-1">
+                  {currentTask.acceptedAnswers
+                    .filter(
+                      (answer) =>
+                        answer !==
+                        currentTask.expectedAnswer
+                    )
+                    .map((answer) => (
+                      <p
+                        key={answer}
+                        className="text-sm text-gray-500"
+                      >
+                        {answer}
+                      </p>
+                    ))}
+                </div>
+
+              </div>
+            )}
 
           <p className="text-center text-sm text-gray-400 mt-5">
             No score — just compare and learn.
           </p>
 
           <button
-            ref={actionRef}
             type="button"
             onClick={nextTask}
             className="w-full mt-7 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition"
@@ -579,18 +594,20 @@ function WrittenNotesSection({
           </button>
 
         </div>
-
       </div>
     );
   }
 
-  // =========================
+  // ==========================================
   // ORIGINAL SENTENCE
-  // =========================
+  // ==========================================
 
   if (stage === "original") {
     return (
-      <div className="max-w-3xl mx-auto">
+      <div
+        ref={contentRef}
+        className="max-w-3xl mx-auto"
+      >
 
         <div className="text-center mb-8">
 
@@ -630,7 +647,6 @@ function WrittenNotesSection({
           </div>
 
           <button
-            ref={actionRef}
             type="button"
             onClick={handleOriginalWritten}
             className="w-full mt-7 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition"
@@ -647,18 +663,20 @@ function WrittenNotesSection({
           </button>
 
         </div>
-
       </div>
     );
   }
 
-  // =========================
+  // ==========================================
   // SAVE PHOTO
-  // =========================
+  // ==========================================
 
   if (stage === "save") {
     return (
-      <div className="max-w-3xl mx-auto">
+      <div
+        ref={contentRef}
+        className="max-w-3xl mx-auto"
+      >
 
         <div className="text-center mb-8">
 
@@ -690,7 +708,6 @@ function WrittenNotesSection({
               />
 
               <button
-                ref={actionRef}
                 type="button"
                 onClick={savePhoto}
                 className="w-full mt-6 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition"
@@ -708,7 +725,11 @@ function WrittenNotesSection({
                   onChange={handlePhotoChange}
                 />
 
-                <span className="block w-full text-center cursor-pointer border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold py-3 rounded-xl transition">
+                <span
+                  ref={actionRef}
+                  tabIndex={0}
+                  className="block w-full text-center cursor-pointer border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold py-3 rounded-xl transition"
+                >
                   Choose another photo
                 </span>
 
@@ -755,7 +776,6 @@ function WrittenNotesSection({
           </button>
 
         </div>
-
       </div>
     );
   }

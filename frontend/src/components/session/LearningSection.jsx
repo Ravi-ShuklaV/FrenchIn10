@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import useSessionStore from "../../store/sessionStore";
-
+import SpeakerButton from "../common/SpeakerButton";
 function LearningSection({
   title,
   items = [],
@@ -283,10 +283,15 @@ function LearningSection({
                 sectionType}
             </p>
 
-            <h3 className="text-4xl font-bold text-slate-800 mt-5">
-              {currentItem.french ||
-                currentItem.title}
-            </h3>
+            <div className="flex items-center justify-center gap-3 mt-5">
+  <h3 className="text-4xl font-bold text-slate-800">
+    {currentItem.french || currentItem.title}
+  </h3>
+
+  <SpeakerButton
+    text={currentItem.french || currentItem.title}
+  />
+</div>
 
             {currentItem.english && (
               <p className="text-xl text-gray-500 mt-3">

@@ -1,0 +1,902 @@
+{
+  "id": 2,
+  "title": "Greetings & Introductions",
+  "scenario": "Meeting Someone New",
+  "difficulty": "Beginner",
+  "estimatedTime": 10,
+  "level": "A1",
+  "objectives": [
+    "Greet someone politely.",
+    "Introduce yourself by name.",
+    "Ask someone else's name.",
+    "Say where you are from.",
+    "Say goodbye politely."
+  ],
+  "learning": {
+    "vocabulary": [
+      {
+        "conceptId": "bonjour",
+        "type": "vocabulary",
+        "french": "Bonjour",
+        "english": "Hello",
+        "explanation": "A standard greeting used any time before evening.",
+        "examples": [
+          {
+            "french": "Bonjour, je m'appelle Léa.",
+            "english": "Hello, my name is Léa."
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"Bonjour\" mean?",
+            "options": [
+              "Goodbye",
+              "Hello",
+              "Please",
+              "Friend"
+            ],
+            "correctAnswer": "Hello"
+          }
+        ]
+      },
+      {
+        "conceptId": "salut",
+        "type": "vocabulary",
+        "french": "Salut",
+        "english": "Hi",
+        "explanation": "A casual greeting used with friends, not appropriate in formal settings.",
+        "examples": [
+          {
+            "french": "Salut ! Ça va ?",
+            "english": "Hi! How are you?"
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"Salut\" mean?",
+            "options": [
+              "Hi",
+              "Goodbye",
+              "Name",
+              "Country"
+            ],
+            "correctAnswer": "Hi"
+          }
+        ]
+      },
+      {
+        "conceptId": "prenom",
+        "type": "vocabulary",
+        "french": "Prénom",
+        "english": "First name",
+        "explanation": "Refers specifically to someone's given name, not their family name.",
+        "examples": [
+          {
+            "french": "Mon prénom est Marie.",
+            "english": "My first name is Marie."
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"prénom\" mean?",
+            "options": [
+              "Last name",
+              "First name",
+              "City",
+              "Country"
+            ],
+            "correctAnswer": "First name"
+          }
+        ]
+      },
+      {
+        "conceptId": "nom",
+        "type": "vocabulary",
+        "french": "Nom",
+        "english": "Name / Last name",
+        "explanation": "Can mean \"name\" in general, or specifically \"last name\" depending on context.",
+        "examples": [
+          {
+            "french": "Quel est votre nom ?",
+            "english": "What is your name?"
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"nom\" mean?",
+            "options": [
+              "Name",
+              "Friend",
+              "City",
+              "Hello"
+            ],
+            "correctAnswer": "Name"
+          }
+        ]
+      },
+      {
+        "conceptId": "ami_amie",
+        "type": "vocabulary",
+        "french": "Ami / Amie",
+        "english": "Friend",
+        "explanation": "\"Ami\" is masculine, \"amie\" is feminine — both mean \"friend\".",
+        "examples": [
+          {
+            "french": "C'est mon ami.",
+            "english": "This is my friend."
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"ami\" mean?",
+            "options": [
+              "Friend",
+              "Name",
+              "Country",
+              "City"
+            ],
+            "correctAnswer": "Friend"
+          }
+        ]
+      },
+      {
+        "conceptId": "pays",
+        "type": "vocabulary",
+        "french": "Pays",
+        "english": "Country",
+        "explanation": "Used when talking about where someone is from at the national level.",
+        "examples": [
+          {
+            "french": "Quel est ton pays ?",
+            "english": "What is your country?"
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"pays\" mean?",
+            "options": [
+              "City",
+              "Country",
+              "Friend",
+              "Name"
+            ],
+            "correctAnswer": "Country"
+          }
+        ]
+      },
+      {
+        "conceptId": "ville",
+        "type": "vocabulary",
+        "french": "Ville",
+        "english": "City",
+        "explanation": "Used when talking about where someone is from at the city level.",
+        "examples": [
+          {
+            "french": "Ma ville est Paris.",
+            "english": "My city is Paris."
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"ville\" mean?",
+            "options": [
+              "Country",
+              "City",
+              "Friend",
+              "Hello"
+            ],
+            "correctAnswer": "City"
+          }
+        ]
+      },
+      {
+        "conceptId": "francais_francaise",
+        "type": "vocabulary",
+        "french": "Français / Française",
+        "english": "French (nationality)",
+        "explanation": "\"Français\" is masculine, \"française\" is feminine, both mean the nationality \"French\".",
+        "examples": [
+          {
+            "french": "Je suis française.",
+            "english": "I am French."
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"française\" mean?",
+            "options": [
+              "French (nationality)",
+              "Friend",
+              "City",
+              "Country"
+            ],
+            "correctAnswer": "French (nationality)"
+          }
+        ]
+      }
+    ],
+    "phrases": [
+      {
+        "conceptId": "je_m_appelle",
+        "type": "phrase",
+        "french": "Je m'appelle ...",
+        "english": "My name is ...",
+        "explanation": "Used to introduce yourself by name, literally \"I call myself\".",
+        "examples": [
+          {
+            "french": "Bonjour, je m'appelle Marie.",
+            "english": "Hello, my name is Marie."
+          }
+        ],
+        "questions": [
+          {
+            "question": "Which phrase means \"My name is ...\"?",
+            "options": [
+              "Je viens de ...",
+              "Je m'appelle ...",
+              "Je suis de ...",
+              "Comment tu t'appelles ?"
+            ],
+            "correctAnswer": "Je m'appelle ..."
+          }
+        ]
+      },
+      {
+        "conceptId": "comment_tu_t_appelles",
+        "type": "phrase",
+        "french": "Comment tu t'appelles ?",
+        "english": "What is your name?",
+        "explanation": "The informal way to ask someone their name.",
+        "examples": [
+          {
+            "french": "Salut ! Comment tu t'appelles ?",
+            "english": "Hi! What is your name?"
+          }
+        ],
+        "questions": [
+          {
+            "question": "Which question means \"What is your name?\"",
+            "options": [
+              "Comment tu t'appelles ?",
+              "Comment ça va ?",
+              "Où êtes-vous ?",
+              "Qui êtes-vous ?"
+            ],
+            "correctAnswer": "Comment tu t'appelles ?"
+          }
+        ]
+      },
+      {
+        "conceptId": "je_suis",
+        "type": "phrase",
+        "french": "Je suis ...",
+        "english": "I am ...",
+        "explanation": "Used with a name, nationality, or description to say what/who you are.",
+        "examples": [
+          {
+            "french": "Je suis française.",
+            "english": "I am French."
+          }
+        ],
+        "questions": [
+          {
+            "question": "Which phrase means \"I am ...\"?",
+            "options": [
+              "Je suis ...",
+              "Je viens ...",
+              "Tu es ...",
+              "Je vais ..."
+            ],
+            "correctAnswer": "Je suis ..."
+          }
+        ]
+      },
+      {
+        "conceptId": "je_viens_de",
+        "type": "phrase",
+        "french": "Je viens de ...",
+        "english": "I come from ...",
+        "explanation": "Used to say where you are from, followed by a city or country.",
+        "examples": [
+          {
+            "french": "Je viens de Paris.",
+            "english": "I come from Paris."
+          }
+        ],
+        "questions": [
+          {
+            "question": "Which phrase means \"I come from ...\"?",
+            "options": [
+              "Je viens de ...",
+              "Je suis de ...",
+              "Je vais à ...",
+              "Je m'appelle ..."
+            ],
+            "correctAnswer": "Je viens de ..."
+          },
+          {
+            "question": "Complete: ___ Paris.",
+            "options": [
+              "Je viens de",
+              "Je suis",
+              "Je m'appelle",
+              "Je vais"
+            ],
+            "correctAnswer": "Je viens de"
+          }
+        ]
+      },
+      {
+        "conceptId": "enchante",
+        "type": "phrase",
+        "french": "Enchanté(e)",
+        "english": "Nice to meet you",
+        "explanation": "Said right after learning someone's name for the first time.",
+        "examples": [
+          {
+            "french": "Enchanté, Marie.",
+            "english": "Nice to meet you, Marie."
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"Enchanté\" mean?",
+            "options": [
+              "Goodbye",
+              "Nice to meet you",
+              "How are you?",
+              "See you soon"
+            ],
+            "correctAnswer": "Nice to meet you"
+          }
+        ]
+      },
+      {
+        "conceptId": "ca_va",
+        "type": "phrase",
+        "french": "Ça va ?",
+        "english": "How are you? / Are you okay?",
+        "explanation": "A casual way to ask how someone is doing.",
+        "examples": [
+          {
+            "french": "Salut ! Ça va ?",
+            "english": "Hi! How are you?"
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"Ça va ?\" mean?",
+            "options": [
+              "How are you?",
+              "What is your name?",
+              "Where are you from?",
+              "See you soon"
+            ],
+            "correctAnswer": "How are you?"
+          }
+        ]
+      },
+      {
+        "conceptId": "ca_va_bien",
+        "type": "phrase",
+        "french": "Ça va bien",
+        "english": "I'm doing well",
+        "explanation": "A common, casual response to \"Ça va ?\".",
+        "examples": [
+          {
+            "french": "Ça va bien, merci.",
+            "english": "I'm doing well, thank you."
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"Ça va bien\" mean?",
+            "options": [
+              "I'm doing well",
+              "What is your name?",
+              "Goodbye",
+              "See you soon"
+            ],
+            "correctAnswer": "I'm doing well"
+          }
+        ]
+      },
+      {
+        "conceptId": "au_revoir",
+        "type": "phrase",
+        "french": "Au revoir",
+        "english": "Goodbye",
+        "explanation": "The standard way to say goodbye.",
+        "examples": [
+          {
+            "french": "Au revoir, Marie !",
+            "english": "Goodbye, Marie!"
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"Au revoir\" mean?",
+            "options": [
+              "Hello",
+              "Goodbye",
+              "Nice to meet you",
+              "How are you?"
+            ],
+            "correctAnswer": "Goodbye"
+          }
+        ]
+      },
+      {
+        "conceptId": "a_bientot",
+        "type": "phrase",
+        "french": "À bientôt",
+        "english": "See you soon",
+        "explanation": "A friendly way to say goodbye when you expect to see someone again soon.",
+        "examples": [
+          {
+            "french": "Au revoir, à bientôt !",
+            "english": "Goodbye, see you soon!"
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"À bientôt\" mean?",
+            "options": [
+              "See you soon",
+              "Nice to meet you",
+              "How are you?",
+              "I come from"
+            ],
+            "correctAnswer": "See you soon"
+          }
+        ]
+      }
+    ],
+    "grammar": [
+      {
+        "conceptId": "s_appeler",
+        "type": "grammar",
+        "title": "The verb s'appeler (to be called)",
+        "explanation": "\"S'appeler\" is a reflexive verb used to say your name: \"je m'appelle\" (my name is) and \"tu t'appelles\" (your name is).",
+        "examples": [
+          {
+            "french": "Je m'appelle Léa.",
+            "english": "My name is Léa."
+          },
+          {
+            "french": "Tu t'appelles Marc ?",
+            "english": "Is your name Marc?"
+          }
+        ],
+        "questions": [
+          {
+            "question": "Complete: Je m'___ Léa.",
+            "options": [
+              "appelle",
+              "appelles",
+              "suis",
+              "viens"
+            ],
+            "correctAnswer": "appelle"
+          },
+          {
+            "question": "Which form is used to ask someone's name informally?",
+            "options": [
+              "Comment tu t'appelles ?",
+              "Comment je m'appelle ?",
+              "Comment il s'appelle ?",
+              "Comment vous appelle ?"
+            ],
+            "correctAnswer": "Comment tu t'appelles ?"
+          }
+        ]
+      },
+      {
+        "conceptId": "etre",
+        "type": "grammar",
+        "title": "The verb être (to be) — je / tu",
+        "explanation": "\"Être\" is irregular: \"je suis\" (I am) and \"tu es\" (you are), used for name, nationality, or description.",
+        "examples": [
+          {
+            "french": "Je suis française.",
+            "english": "I am French."
+          },
+          {
+            "french": "Tu es mon ami.",
+            "english": "You are my friend."
+          }
+        ],
+        "questions": [
+          {
+            "question": "Complete: Je ___ française.",
+            "options": [
+              "suis",
+              "es",
+              "appelle",
+              "viens"
+            ],
+            "correctAnswer": "suis"
+          },
+          {
+            "question": "Which form means \"you are\"?",
+            "options": [
+              "Tu es",
+              "Je suis",
+              "Tu suis",
+              "Je es"
+            ],
+            "correctAnswer": "Tu es"
+          }
+        ]
+      },
+      {
+        "conceptId": "venir_de",
+        "type": "grammar",
+        "title": "Venir de (to come from)",
+        "explanation": "Use \"je viens de\" + city or country to say where you are from.",
+        "examples": [
+          {
+            "french": "Je viens de France.",
+            "english": "I come from France."
+          },
+          {
+            "french": "Je viens de Paris.",
+            "english": "I come from Paris."
+          }
+        ],
+        "questions": [
+          {
+            "question": "Complete: Je ___ de Paris.",
+            "options": [
+              "viens",
+              "suis",
+              "appelle",
+              "vais"
+            ],
+            "correctAnswer": "viens"
+          },
+          {
+            "question": "Which phrase correctly says \"I come from France\"?",
+            "options": [
+              "Je viens de France.",
+              "Je suis de France.",
+              "Je vais France.",
+              "Je m'appelle France."
+            ],
+            "correctAnswer": "Je viens de France."
+          }
+        ]
+      }
+    ],
+    "order": [
+      "vocabulary",
+      "phrases",
+      "grammar"
+    ]
+  },
+  "practice": {
+    "sentenceRecall": [
+      {
+        "id": "recall_1",
+        "type": "sentenceRecall",
+        "prompt": "Translate: \"My name is Marie.\"",
+        "expectedAnswer": "Je m'appelle Marie.",
+        "acceptedAnswers": [
+          "Je m'appelle Marie.",
+          "Je m'appelle Marie"
+        ],
+        "targetConcepts": [
+          "je_m_appelle"
+        ]
+      },
+      {
+        "id": "recall_2",
+        "type": "sentenceRecall",
+        "prompt": "Complete: \"Comment tu t'___ ?\"",
+        "expectedAnswer": "appelles",
+        "acceptedAnswers": [
+          "appelles"
+        ],
+        "targetConcepts": [
+          "comment_tu_t_appelles",
+          "s_appeler"
+        ]
+      },
+      {
+        "id": "recall_3",
+        "type": "sentenceRecall",
+        "prompt": "Translate: \"I come from France.\"",
+        "expectedAnswer": "Je viens de France.",
+        "acceptedAnswers": [
+          "Je viens de France.",
+          "Je viens de France"
+        ],
+        "targetConcepts": [
+          "je_viens_de",
+          "venir_de"
+        ]
+      },
+      {
+        "id": "recall_4",
+        "type": "sentenceRecall",
+        "prompt": "Translate: \"Nice to meet you.\"",
+        "expectedAnswer": "Enchanté.",
+        "acceptedAnswers": [
+          "Enchanté.",
+          "Enchanté",
+          "Enchantée.",
+          "Enchantée"
+        ],
+        "targetConcepts": [
+          "enchante"
+        ]
+      }
+    ],
+    "writing": [
+      {
+        "id": "write_1",
+        "type": "writing",
+        "prompt": "Translate: \"Hello, my name is Marie.\"",
+        "english": "Hello, my name is Marie.",
+        "expectedAnswer": "Bonjour, je m'appelle Marie.",
+        "acceptedAnswers": [
+          "Bonjour, je m'appelle Marie.",
+          "Bonjour je m'appelle Marie."
+        ],
+        "targetConcepts": [
+          "bonjour",
+          "je_m_appelle"
+        ]
+      },
+      {
+        "id": "write_2",
+        "type": "writing",
+        "prompt": "Translate: \"I come from Paris.\"",
+        "english": "I come from Paris.",
+        "expectedAnswer": "Je viens de Paris.",
+        "acceptedAnswers": [
+          "Je viens de Paris.",
+          "Je viens de Paris"
+        ],
+        "targetConcepts": [
+          "je_viens_de",
+          "ville"
+        ]
+      },
+      {
+        "id": "write_3",
+        "type": "writing",
+        "prompt": "Translate: \"Goodbye, see you soon.\"",
+        "english": "Goodbye, see you soon.",
+        "expectedAnswer": "Au revoir, à bientôt.",
+        "acceptedAnswers": [
+          "Au revoir, à bientôt.",
+          "Au revoir, a bientot."
+        ],
+        "targetConcepts": [
+          "au_revoir",
+          "a_bientot"
+        ]
+      },
+      {
+        "id": "write_4",
+        "type": "writing",
+        "prompt": "Translate: \"I am French.\"",
+        "english": "I am French.",
+        "expectedAnswer": "Je suis française.",
+        "acceptedAnswers": [
+          "Je suis française.",
+          "Je suis francaise.",
+          "Je suis français.",
+          "Je suis francais."
+        ],
+        "targetConcepts": [
+          "je_suis",
+          "francais_francaise",
+          "etre"
+        ]
+      }
+    ],
+    "speaking": [
+      {
+        "id": "speak_1",
+        "prompt": "Say: Hello, my name is Marie.",
+        "expectedAnswer": "Bonjour, je m'appelle Marie.",
+        "acceptedAnswers": [
+          "Bonjour, je m'appelle Marie.",
+          "Bonjour je m'appelle Marie.",
+          "Salut, je m'appelle Marie."
+        ],
+        "targetConcepts": [
+          "bonjour",
+          "je_m_appelle"
+        ]
+      },
+      {
+        "id": "speak_2",
+        "prompt": "Say: What is your name?",
+        "expectedAnswer": "Comment tu t'appelles ?",
+        "acceptedAnswers": [
+          "Comment tu t'appelles ?",
+          "Comment tu t'appelles?"
+        ],
+        "targetConcepts": [
+          "comment_tu_t_appelles"
+        ]
+      },
+      {
+        "id": "speak_3",
+        "prompt": "Say: I come from France.",
+        "expectedAnswer": "Je viens de France.",
+        "acceptedAnswers": [
+          "Je viens de France.",
+          "Je viens de France"
+        ],
+        "targetConcepts": [
+          "je_viens_de",
+          "pays"
+        ]
+      },
+      {
+        "id": "speak_4",
+        "prompt": "Say: Goodbye, see you soon.",
+        "expectedAnswer": "Au revoir, à bientôt.",
+        "acceptedAnswers": [
+          "Au revoir, à bientôt.",
+          "Au revoir, a bientot.",
+          "Au revoir."
+        ],
+        "targetConcepts": [
+          "au_revoir",
+          "a_bientot"
+        ]
+      }
+    ]
+  },
+  "session": {
+    "targetMinutes": 10,
+    "sections": [
+      {
+        "id": "vocabulary",
+        "label": "Vocabulary",
+        "timeLimitSeconds": 100
+      },
+      {
+        "id": "grammar",
+        "label": "Grammar",
+        "timeLimitSeconds": 100
+      },
+      {
+        "id": "sentenceRecall",
+        "label": "Sentence Recall",
+        "timeLimitSeconds": 100
+      },
+      {
+        "id": "handwriting",
+        "label": "Write It",
+        "timeLimitSeconds": 90
+      },
+      {
+        "id": "speaking",
+        "label": "Speak It",
+        "timeLimitSeconds": 105
+      },
+      {
+        "id": "mission",
+        "label": "Your Mission",
+        "timeLimitSeconds": 105
+      }
+    ]
+  },
+  "mission": {
+    "title": "Your Mission",
+    "scenario": "You meet a new French friend for the first time. Complete the conversation naturally.",
+    "instructions": "Respond naturally in French using the words and phrases you learned in this lesson.",
+    "selection": {
+      "minTurns": 3,
+      "maxTurns": 4,
+      "prioritizeWeakConcepts": true,
+      "includeNormalTurns": true,
+      "includeChallengeTurn": true
+    },
+    "turns": [
+      {
+        "id": "greet",
+        "type": "greeting",
+        "difficulty": "easy",
+        "speaker": "Camille",
+        "french": "Salut ! Ça va ?",
+        "english": "Hi! How are you?",
+        "targetConcepts": [
+          "salut",
+          "ca_va",
+          "ca_va_bien"
+        ],
+        "acceptedAnswers": [
+          "Ça va bien, merci.",
+          "Ça va bien.",
+          "Salut, ça va bien."
+        ]
+      },
+      {
+        "id": "ask_name",
+        "type": "introduction",
+        "difficulty": "medium",
+        "speaker": "Camille",
+        "french": "Comment tu t'appelles ?",
+        "english": "What is your name?",
+        "targetConcepts": [
+          "comment_tu_t_appelles",
+          "je_m_appelle",
+          "s_appeler"
+        ],
+        "acceptedAnswers": [
+          "Je m'appelle Marie.",
+          "Je m'appelle Marie."
+        ]
+      },
+      {
+        "id": "ask_origin",
+        "type": "introduction",
+        "difficulty": "medium",
+        "speaker": "Camille",
+        "french": "Enchanté ! Tu viens d'où ?",
+        "english": "Nice to meet you! Where are you from?",
+        "targetConcepts": [
+          "enchante",
+          "je_viens_de",
+          "venir_de",
+          "pays"
+        ],
+        "acceptedAnswers": [
+          "Je viens de France.",
+          "Je viens de Paris."
+        ]
+      },
+      {
+        "id": "goodbye",
+        "type": "goodbye",
+        "difficulty": "easy",
+        "speaker": "Camille",
+        "french": "D'accord ! Au revoir !",
+        "english": "Okay! Goodbye!",
+        "targetConcepts": [
+          "au_revoir",
+          "a_bientot"
+        ],
+        "acceptedAnswers": [
+          "Au revoir.",
+          "Au revoir, à bientôt.",
+          "À bientôt."
+        ]
+      },
+      {
+        "id": "full_introduction_challenge",
+        "type": "introduction",
+        "difficulty": "hard",
+        "speaker": "Camille",
+        "french": "Salut ! Comment tu t'appelles et tu viens d'où ?",
+        "english": "Hi! What is your name and where are you from?",
+        "targetConcepts": [
+          "je_m_appelle",
+          "je_suis",
+          "je_viens_de",
+          "s_appeler",
+          "etre",
+          "venir_de"
+        ],
+        "acceptedAnswers": [
+          "Je m'appelle Marie et je viens de France.",
+          "Je m'appelle Marie, je viens de Paris."
+        ]
+      }
+    ]
+  },
+  "ai": {
+    "name": "Camille",
+    "role": "friendly French student meeting you for the first time",
+    "greeting": "Salut ! Je m'appelle Camille. Et toi, comment tu t'appelles ?",
+    "maxWords": 12,
+    "englishAllowed": false
+  }
+}

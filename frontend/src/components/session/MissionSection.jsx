@@ -20,14 +20,14 @@ function MissionSection({ mission }) {
 
   const [missionTurns, setMissionTurns] = useState([]);
   const [currentTurn, setCurrentTurn] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [answer, setAnswer] = useState("");
   const [feedback, setFeedback] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasScoredCurrentTurn, setHasScoredCurrentTurn] =
+    useState(false);
   const [questionStartedAt, setQuestionStartedAt] =
     useState(Date.now());
   const [showHint, setShowHint] = useState(false);
-  const [hasScoredCurrentTurn, setHasScoredCurrentTurn] =
-    useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   const actionRef = useRef(null);
 
@@ -48,7 +48,7 @@ function MissionSection({ mission }) {
 
     setMissionTurns(selected);
     setCurrentTurn(0);
-  }, [mission]);
+  }, [mission, getWeakConcepts]);
 
   const currentMission = missionTurns[currentTurn];
 
@@ -57,14 +57,12 @@ function MissionSection({ mission }) {
   // =========================
 
   useEffect(() => {
-    setSelectedAnswer(null);
-    setFeedback(null);
     setQuestionStartedAt(Date.now());
-    setShowHint(false);
+    setAnswer("");
+    setFeedback(null);
+    setIsSubmitting(false);
     setHasScoredCurrentTurn(false);
-    setIsPlaying(false);
-
-    window.speechSynthesis?.cancel();
+    setShowHint(false);
   }, [currentTurn]);
 
   // =========================
@@ -84,73 +82,74 @@ function MissionSection({ mission }) {
         block: "center",
         inline: "nearest",
       });
+
+      requestAnimationFrame(() => {
+        try {
+          element.focus({
+            preventScroll: true,
+          });
+        } catch {
+          element.focus();
+        }
+      });
     }, 50);
 
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(timer);
+    };
   }, [currentTurn, currentMission]);
 
   // =========================
-  // CLEAN UP AUDIO
+  // NORMALIZE ANSWER
   // =========================
 
-  useEffect(() => {
-    return () => {
-      window.speechSynthesis?.cancel();
-    };
-  }, []);
+  function normalizeText(text) {
+    return String(text)
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[.,!?;:'"()\-–—]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
 
   // =========================
-  // PLAY LISTENING
+  // CHECK ANSWER
   // =========================
 
-  function playListening() {
+  function isCorrectAnswer() {
+    if (!currentMission) {
+      return false;
+    }
+
+    const actual = normalizeText(answer);
+
+    const acceptedAnswers =
+      Array.isArray(currentMission.acceptedAnswers)
+        ? currentMission.acceptedAnswers
+        : [];
+
+    return acceptedAnswers.some(
+      (accepted) =>
+        normalizeText(accepted) === actual
+    );
+  }
+
+  // =========================
+  // SUBMIT
+  // =========================
+
+  function handleSubmit() {
     if (
+      !answer.trim() ||
       !currentMission ||
-      currentMission.type !== "listening" ||
-      !window.speechSynthesis
+      isSubmitting
     ) {
       return;
     }
 
-    window.speechSynthesis.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(
-      currentMission.audioText || currentMission.french || ""
-    );
-
-    utterance.lang = "fr-FR";
-    utterance.rate = 0.85;
-    utterance.pitch = 1;
-
-    utterance.onstart = () => {
-      setIsPlaying(true);
-    };
-
-    utterance.onend = () => {
-      setIsPlaying(false);
-    };
-
-    utterance.onerror = () => {
-      setIsPlaying(false);
-    };
-
-    setIsPlaying(true);
-    window.speechSynthesis.speak(utterance);
-  }
-
-  // =========================
-  // ANSWER
-  // =========================
-
-  function handleAnswer(index) {
-    if (!currentMission || feedback) {
-      return;
-    }
-
-    setSelectedAnswer(index);
-
-    const correct =
-      index === currentMission.correctAnswer;
+    const correct = isCorrectAnswer();
 
     const responseTime = Math.max(
       0,
@@ -159,33 +158,36 @@ function MissionSection({ mission }) {
       )
     );
 
-    // Score ONLY the first attempt.
+    // =========================
+    // RECORD PERFORMANCE
+    // =========================
+
     if (!hasScoredCurrentTurn) {
       addPerformance({
-  questionId: `mission_${currentMission.id}`,
+        questionId: `mission_${currentMission.id}`,
 
-  conceptId:
-    currentMission.targetConcepts?.[0] ||
-    currentMission.id,
+        conceptId:
+          currentMission.targetConcepts?.[0] ||
+          currentMission.id,
 
-  french: currentMission.french || "",
-  english: currentMission.english || "",
-  type: "dialogue",
+        french: currentMission.acceptedAnswers?.[0] || "",
+        english: currentMission.english || "",
 
-  section: "mission",
+        type: "mission",
 
-  attempts: 1,
+        section: "mission",
 
-  correct,
+        attempts: 1,
+        correct,
 
-  score: correct ? 1 : 0,
+        score: correct ? 1 : 0,
 
-  responseTime,
+        responseTime,
 
-  hintsUsed: showHint ? 1 : 0,
+        hintsUsed: showHint ? 1 : 0,
 
-  isReinforcement: false,
-});
+        isReinforcement: false,
+      });
 
       setHasScoredCurrentTurn(true);
     }
@@ -197,7 +199,8 @@ function MissionSection({ mission }) {
     if (!correct) {
       setFeedback({
         type: "wrong",
-        message: "Not quite. Take another look and try again.",
+        message:
+          "Not quite. Try the conversation again.",
       });
 
       return;
@@ -207,12 +210,14 @@ function MissionSection({ mission }) {
     // CORRECT
     // =========================
 
+    setIsSubmitting(true);
+
     setFeedback({
       type: "correct",
-      message: "Perfect! 🎉",
+      message: "Perfect! ☕",
     });
 
-    window.setTimeout( async () => {
+    window.setTimeout(() => {
       const isLast =
         currentTurn >= missionTurns.length - 1;
 
@@ -225,21 +230,11 @@ function MissionSection({ mission }) {
       setCurrentTurn(
         (previous) => previous + 1
       );
-    }, 700);
+    }, 800);
   }
 
   // =========================
-  // TRY AGAIN
-  // =========================
-
-  function handleTryAgain() {
-    setSelectedAnswer(null);
-    setFeedback(null);
-    setQuestionStartedAt(Date.now());
-  }
-
-  // =========================
-  // UNAVAILABLE
+  // MISSION UNAVAILABLE
   // =========================
 
   if (
@@ -248,31 +243,37 @@ function MissionSection({ mission }) {
   ) {
     return (
       <div className="max-w-3xl mx-auto text-center py-12">
-        <div className="text-5xl mb-5">🎯</div>
+        <div className="text-5xl mb-5">
+          🎯
+        </div>
 
         <h2 className="text-3xl font-bold text-slate-800">
           Mission
         </h2>
 
         <p className="text-gray-500 mt-3">
-          This lesson does not have a Mission configured yet.
+          This lesson does not have a
+          Mission configured yet.
         </p>
       </div>
     );
   }
+
+  // =========================
+  // UI
+  // =========================
 
   return (
     <div className="max-w-3xl mx-auto">
 
       {/* HEADER */}
 
-      <div className="text-center mb-5">
-
+      <div className="text-center mb-6">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 border border-amber-100 text-amber-700 text-sm font-semibold">
           🎯 Final Mission
         </div>
 
-        <h2 className="text-3xl font-bold text-slate-800 mt-3">
+        <h2 className="text-3xl font-bold text-slate-800 mt-4">
           {mission.title || "Your Mission"}
         </h2>
 
@@ -280,216 +281,131 @@ function MissionSection({ mission }) {
           {mission.scenario ||
             "Use what you learned to complete the conversation."}
         </p>
-
       </div>
 
       {/* PROGRESS */}
 
-      <div className="flex items-center justify-center gap-2 mb-5">
-        {missionTurns.map((turn, index) => (
+      <div className="flex items-center justify-center gap-2 mb-6">
+        {missionTurns.map((_, index) => (
           <div
-            key={turn.id || index}
+            key={index}
             className={`h-2.5 rounded-full transition-all ${
               index === currentTurn
                 ? "w-8 bg-amber-500"
                 : index < currentTurn
-                ? "w-2.5 bg-emerald-500"
-                : "w-2.5 bg-gray-200"
+                  ? "w-2.5 bg-emerald-500"
+                  : "w-2.5 bg-gray-200"
             }`}
           />
         ))}
       </div>
 
-      <p className="text-center text-xs text-gray-400 -mt-2 mb-5">
+      <p className="text-center text-xs text-gray-400 -mt-3 mb-6">
         Challenge {currentTurn + 1} of{" "}
         {missionTurns.length}
       </p>
 
-      {/* MAIN CARD */}
+      {/* CONVERSATION CARD */}
 
       <div className="bg-white border border-gray-200 rounded-3xl shadow-sm overflow-hidden">
 
-        {/* LISTENING HEADER */}
+        {/* BARISTA */}
 
-        {currentMission.type === "listening" ? (
-          <div className="bg-gradient-to-br from-indigo-50 to-blue-50 p-5 border-b border-indigo-100">
+        <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 border-b border-amber-100">
 
-            <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-3 mb-4">
 
-              <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">
-                🎧
-              </div>
-
-              <div>
-                <p className="text-[11px] uppercase tracking-wider text-indigo-400 font-semibold">
-                  Listening Challenge
-                </p>
-
-                <p className="font-bold text-slate-800">
-                  Listen carefully
-                </p>
-              </div>
-
+            <div className="w-11 h-11 rounded-full bg-white shadow-sm flex items-center justify-center text-xl">
+              ☕
             </div>
 
-            <div className="bg-white rounded-2xl p-5 shadow-sm text-center">
-
-              <p className="text-sm text-gray-500 mb-4">
-                Listen to the French sentence and choose what it means.
+            <div>
+              <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold">
+                Conversation
               </p>
 
+              <p className="font-bold text-slate-800">
+                {currentMission.speaker || "Barista"}
+              </p>
+            </div>
+
+          </div>
+
+          <div className="bg-white rounded-2xl rounded-tl-md p-5 shadow-sm">
+
+            <p className="text-xl font-semibold text-slate-800 leading-relaxed">
+              {currentMission.french}
+            </p>
+
+            {/* ENGLISH HINT */}
+
+            {showHint ? (
+              <div className="mt-4 pt-4 border-t border-gray-100">
+
+                <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1">
+                  English meaning
+                </p>
+
+                <p className="text-sm text-gray-500">
+                  {currentMission.english}
+                </p>
+
+              </div>
+            ) : (
               <button
                 type="button"
-                onClick={playListening}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition"
+                onClick={() => setShowHint(true)}
+                className="mt-4 text-sm font-medium text-amber-600 hover:text-amber-700"
               >
-                {isPlaying
-                  ? "🔊 Playing..."
-                  : "🔊 Play French"}
+                💡 Show English meaning
               </button>
-
-              {showHint && (
-                <p className="text-sm text-gray-500 mt-4">
-                  {currentMission.audioText}
-                </p>
-              )}
-
-            </div>
-
-          </div>
-        ) : (
-          /* NORMAL CONVERSATION HEADER */
-
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-5 border-b border-amber-100">
-
-            <div className="flex items-center gap-3 mb-4">
-
-              <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg">
-                ☕
-              </div>
-
-              <div>
-                <p className="text-[11px] uppercase tracking-wider text-gray-400 font-semibold">
-                  Conversation
-                </p>
-
-                <p className="font-bold text-slate-800">
-                  {currentMission.speaker || "Barista"}
-                </p>
-              </div>
-
-            </div>
-
-            <div className="bg-white rounded-2xl rounded-tl-md p-5 shadow-sm">
-
-              <p className="text-xl font-semibold text-slate-800 leading-relaxed">
-                {currentMission.french}
-              </p>
-
-              {!showHint ? (
-                <button
-                  type="button"
-                  onClick={() => setShowHint(true)}
-                  className="mt-3 text-sm font-medium text-amber-600 hover:text-amber-700"
-                >
-                  💡 Show English meaning
-                </button>
-              ) : (
-                <div className="mt-3 pt-3 border-t border-gray-100">
-
-                  <p className="text-[11px] uppercase tracking-wider text-gray-400 font-semibold mb-1">
-                    English meaning
-                  </p>
-
-                  <p className="text-sm text-gray-500">
-                    {currentMission.english}
-                  </p>
-
-                </div>
-              )}
-
-            </div>
-
-          </div>
-        )}
-
-        {/* QUESTION */}
-
-        <div
-          ref={actionRef}
-          className="p-5"
-        >
-
-          <div className="mb-5">
-
-            <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold">
-              Your response
-            </p>
-
-            <p className="text-lg font-semibold text-slate-800 mt-1">
-              {currentMission.question ||
-                "Choose the most natural response."}
-            </p>
-
-          </div>
-
-          {/* OPTIONS */}
-
-          <div className="space-y-3">
-
-            {(currentMission.options || []).map(
-              (option, index) => {
-
-                const isSelected =
-                  selectedAnswer === index;
-
-                const isCorrect =
-                  currentMission.correctAnswer === index;
-
-                let optionClasses =
-                  "border-gray-200 bg-white hover:border-amber-400 hover:bg-amber-50";
-
-                if (
-                  feedback?.type === "correct" &&
-                  isCorrect
-                ) {
-                  optionClasses =
-                    "border-emerald-500 bg-emerald-50 text-emerald-800";
-                }
-
-                if (
-                  feedback?.type === "wrong" &&
-                  isSelected
-                ) {
-                  optionClasses =
-                    "border-red-400 bg-red-50 text-red-700";
-                }
-
-                return (
-                  <button
-                    key={index}
-                    type="button"
-                    disabled={!!feedback}
-                    onClick={() =>
-                      handleAnswer(index)
-                    }
-                    className={`w-full text-left border-2 rounded-xl px-4 py-3.5 font-medium transition ${optionClasses}`}
-                  >
-
-                    <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 text-gray-500 text-sm font-bold mr-3">
-                      {String.fromCharCode(
-                        65 + index
-                      )}
-                    </span>
-
-                    {option}
-
-                  </button>
-                );
-              }
             )}
 
           </div>
+        </div>
+
+        {/* RESPONSE */}
+
+        <div className="p-6">
+
+          <p className="text-sm font-semibold text-slate-700 mb-2">
+            Your response
+          </p>
+
+          <p className="text-xs text-gray-400 mb-3">
+            Respond naturally in French.
+          </p>
+
+          <input
+            ref={actionRef}
+            type="text"
+            value={answer}
+            onChange={(event) =>
+              setAnswer(event.target.value)
+            }
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                handleSubmit();
+              }
+            }}
+            placeholder="Type your response in French..."
+            disabled={isSubmitting}
+            className="w-full border border-gray-300 rounded-xl px-4 py-3.5 text-base outline-none transition focus:ring-2 focus:ring-amber-400 focus:border-amber-400 disabled:bg-gray-100"
+          />
+
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={
+              isSubmitting ||
+              !answer.trim()
+            }
+            className="w-full mt-3 rounded-xl bg-amber-500 hover:bg-amber-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold py-3.5 transition"
+          >
+            {isSubmitting
+              ? "Checking..."
+              : "Respond →"}
+          </button>
 
           {/* FEEDBACK */}
 
@@ -513,37 +429,36 @@ function MissionSection({ mission }) {
               </p>
 
               {feedback.type === "wrong" && (
-                <p className="text-sm text-red-500 mt-1">
-                  Think about the French you learned and try again.
-                </p>
+                <div className="mt-2">
+
+                  <p className="text-sm text-red-500">
+                    Think about the words and phrases you learned, then try again.
+                  </p>
+
+                  <p className="text-sm font-semibold text-slate-700 mt-2">
+                    Expected:
+                  </p>
+
+                  <p className="text-sm font-medium text-slate-800">
+                    {currentMission.acceptedAnswers?.[0]}
+                  </p>
+
+                </div>
               )}
 
             </div>
           )}
 
-          {/* TRY AGAIN */}
-
-          {feedback?.type === "wrong" && (
-            <button
-              type="button"
-              onClick={handleTryAgain}
-              className="w-full mt-3 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white font-semibold transition"
-            >
-              Try Again
-            </button>
-          )}
-
         </div>
       </div>
 
-      {/* HINT */}
+      {/* INSTRUCTIONS */}
 
-      {currentMission.type !== "listening" &&
-        mission.instructions && (
-          <p className="text-center text-xs text-gray-400 mt-4 max-w-xl mx-auto">
-            {mission.instructions}
-          </p>
-        )}
+      {mission.instructions && (
+        <p className="text-center text-xs text-gray-400 mt-5 max-w-xl mx-auto">
+          {mission.instructions}
+        </p>
+      )}
 
     </div>
   );

@@ -1,0 +1,776 @@
+{
+  "id": 4,
+  "title": "At a Singing Lesson",
+  "scenario": "Music School",
+  "difficulty": "Beginner",
+  "estimatedTime": 10,
+  "level": "A1",
+  "objectives": [
+    "Talk about singing and music.",
+    "Ask for and give simple instructions during a singing lesson.",
+    "Describe your voice and how you feel while singing.",
+    "Use basic imperative verbs for practice instructions.",
+    "Thank your teacher and say goodbye."
+  ],
+  "learning": {
+    "vocabulary": [
+      {
+        "conceptId": "chanter",
+        "type": "vocabulary",
+        "french": "Chanter",
+        "english": "To sing",
+        "explanation": "A regular -er verb meaning \"to sing\".",
+        "examples": [
+          {
+            "french": "J'aime chanter.",
+            "english": "I like to sing."
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"chanter\" mean?",
+            "options": [
+              "To sing",
+              "To breathe",
+              "To listen",
+              "To play"
+            ],
+            "correctAnswer": "To sing"
+          }
+        ]
+      },
+      {
+        "conceptId": "une_chanson",
+        "type": "vocabulary",
+        "french": "Une chanson",
+        "english": "A song",
+        "explanation": "\"Chanson\" is a feminine noun, so it takes \"une\".",
+        "examples": [
+          {
+            "french": "C'est une belle chanson.",
+            "english": "It's a beautiful song."
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"une chanson\" mean?",
+            "options": [
+              "A voice",
+              "A song",
+              "A note",
+              "A lesson"
+            ],
+            "correctAnswer": "A song"
+          }
+        ]
+      },
+      {
+        "conceptId": "la_voix",
+        "type": "vocabulary",
+        "french": "La voix",
+        "english": "The voice",
+        "explanation": "\"Voix\" is a feminine noun used for someone's singing or speaking voice.",
+        "examples": [
+          {
+            "french": "Tu as une belle voix.",
+            "english": "You have a beautiful voice."
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"la voix\" mean?",
+            "options": [
+              "The voice",
+              "The song",
+              "The rhythm",
+              "The teacher"
+            ],
+            "correctAnswer": "The voice"
+          }
+        ]
+      },
+      {
+        "conceptId": "respirer",
+        "type": "vocabulary",
+        "french": "Respirer",
+        "english": "To breathe",
+        "explanation": "A key verb in singing practice, describing breath control.",
+        "examples": [
+          {
+            "french": "Respire profondément avant de chanter.",
+            "english": "Breathe deeply before singing."
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"respirer\" mean?",
+            "options": [
+              "To breathe",
+              "To sing",
+              "To listen",
+              "To smile"
+            ],
+            "correctAnswer": "To breathe"
+          }
+        ]
+      },
+      {
+        "conceptId": "le_rythme",
+        "type": "vocabulary",
+        "french": "Le rythme",
+        "english": "The rhythm",
+        "explanation": "A masculine noun referring to musical rhythm or beat.",
+        "examples": [
+          {
+            "french": "Suis le rythme.",
+            "english": "Follow the rhythm."
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"le rythme\" mean?",
+            "options": [
+              "The rhythm",
+              "The voice",
+              "The song",
+              "The note"
+            ],
+            "correctAnswer": "The rhythm"
+          }
+        ]
+      },
+      {
+        "conceptId": "une_note",
+        "type": "vocabulary",
+        "french": "Une note",
+        "english": "A note",
+        "explanation": "\"Note\" is feminine and refers to a musical note.",
+        "examples": [
+          {
+            "french": "Cette note est trop haute.",
+            "english": "This note is too high."
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"une note\" mean?",
+            "options": [
+              "A note",
+              "A song",
+              "A voice",
+              "A breath"
+            ],
+            "correctAnswer": "A note"
+          }
+        ]
+      },
+      {
+        "conceptId": "le_professeur",
+        "type": "vocabulary",
+        "french": "Le professeur",
+        "english": "The teacher",
+        "explanation": "A masculine noun for teacher; \"la professeure\" is the feminine form.",
+        "examples": [
+          {
+            "french": "Le professeur écoute attentivement.",
+            "english": "The teacher listens carefully."
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"le professeur\" mean?",
+            "options": [
+              "The teacher",
+              "The song",
+              "The student",
+              "The voice"
+            ],
+            "correctAnswer": "The teacher"
+          }
+        ]
+      },
+      {
+        "conceptId": "encore",
+        "type": "vocabulary",
+        "french": "Encore",
+        "english": "Again",
+        "explanation": "A common word asking to repeat something, also used for \"encore\" in a concert.",
+        "examples": [
+          {
+            "french": "Chante encore, s'il te plaît.",
+            "english": "Sing again, please."
+          }
+        ],
+        "questions": [
+          {
+            "question": "What does \"encore\" mean?",
+            "options": [
+              "Again",
+              "Now",
+              "Slowly",
+              "Loudly"
+            ],
+            "correctAnswer": "Again"
+          }
+        ]
+      }
+    ],
+    "phrases": [
+      {
+        "conceptId": "je_veux_chanter",
+        "type": "phrase",
+        "french": "Je veux chanter.",
+        "english": "I want to sing.",
+        "explanation": "Uses \"vouloir\" + infinitive to express a desire to sing.",
+        "examples": [
+          {
+            "french": "Je veux chanter cette chanson.",
+            "english": "I want to sing this song."
+          }
+        ],
+        "questions": [
+          {
+            "question": "Which phrase means \"I want to sing\"?",
+            "options": [
+              "Je veux chanter.",
+              "Je vais chanter.",
+              "Je peux chanter.",
+              "J'aime chanter."
+            ],
+            "correctAnswer": "Je veux chanter."
+          }
+        ]
+      },
+      {
+        "conceptId": "respire_profondement",
+        "type": "phrase",
+        "french": "Respire profondément.",
+        "english": "Breathe deeply.",
+        "explanation": "A common instruction given by a singing teacher before practice.",
+        "examples": [
+          {
+            "french": "Respire profondément, puis chante.",
+            "english": "Breathe deeply, then sing."
+          }
+        ],
+        "questions": [
+          {
+            "question": "Which phrase means \"Breathe deeply\"?",
+            "options": [
+              "Respire profondément.",
+              "Chante fort.",
+              "Écoute bien.",
+              "Suis le rythme."
+            ],
+            "correctAnswer": "Respire profondément."
+          }
+        ]
+      },
+      {
+        "conceptId": "chante_plus_fort",
+        "type": "phrase",
+        "french": "Chante plus fort.",
+        "english": "Sing louder.",
+        "explanation": "An imperative instruction combining \"chanter\" with \"plus fort\" (louder).",
+        "examples": [
+          {
+            "french": "Chante plus fort, s'il te plaît !",
+            "english": "Sing louder, please!"
+          }
+        ],
+        "questions": [
+          {
+            "question": "Which phrase means \"Sing louder\"?",
+            "options": [
+              "Chante plus fort.",
+              "Chante plus bas.",
+              "Respire profondément.",
+              "Écoute la note."
+            ],
+            "correctAnswer": "Chante plus fort."
+          }
+        ]
+      },
+      {
+        "conceptId": "suis_le_rythme",
+        "type": "phrase",
+        "french": "Suis le rythme.",
+        "english": "Follow the rhythm.",
+        "explanation": "An imperative from \"suivre\" (to follow) used during practice.",
+        "examples": [
+          {
+            "french": "Écoute et suis le rythme.",
+            "english": "Listen and follow the rhythm."
+          }
+        ],
+        "questions": [
+          {
+            "question": "Which phrase means \"Follow the rhythm\"?",
+            "options": [
+              "Suis le rythme.",
+              "Chante la note.",
+              "Respire bien.",
+              "Écoute la chanson."
+            ],
+            "correctAnswer": "Suis le rythme."
+          }
+        ]
+      },
+      {
+        "conceptId": "tu_as_une_belle_voix",
+        "type": "phrase",
+        "french": "Tu as une belle voix.",
+        "english": "You have a beautiful voice.",
+        "explanation": "A compliment using \"avoir\" (to have) + \"une belle voix\".",
+        "examples": [
+          {
+            "french": "Bravo, tu as une belle voix !",
+            "english": "Well done, you have a beautiful voice!"
+          }
+        ],
+        "questions": [
+          {
+            "question": "Which phrase means \"You have a beautiful voice\"?",
+            "options": [
+              "Tu as une belle voix.",
+              "Tu chantes bien.",
+              "Tu as un bon rythme.",
+              "Tu es un bon professeur."
+            ],
+            "correctAnswer": "Tu as une belle voix."
+          }
+        ]
+      },
+      {
+        "conceptId": "encore_une_fois",
+        "type": "phrase",
+        "french": "Encore une fois, s'il te plaît.",
+        "english": "One more time, please.",
+        "explanation": "A polite request to repeat a song or exercise.",
+        "examples": [
+          {
+            "french": "C'était bien ! Encore une fois, s'il te plaît.",
+            "english": "That was good! One more time, please."
+          }
+        ],
+        "questions": [
+          {
+            "question": "Which phrase means \"One more time, please\"?",
+            "options": [
+              "Encore une fois, s'il te plaît.",
+              "Chante plus fort, s'il te plaît.",
+              "Respire profondément, s'il te plaît.",
+              "Merci beaucoup."
+            ],
+            "correctAnswer": "Encore une fois, s'il te plaît."
+          }
+        ]
+      }
+    ],
+    "grammar": [
+      {
+        "conceptId": "er_verbs_present",
+        "type": "grammar",
+        "title": "Regular -er verbs in the present tense",
+        "explanation": "Verbs like \"chanter\" and \"respirer\" follow the regular -er pattern: je chante, tu chantes, il/elle chante.",
+        "examples": [
+          {
+            "french": "Je chante.",
+            "english": "I sing."
+          },
+          {
+            "french": "Tu respires.",
+            "english": "You breathe."
+          }
+        ],
+        "questions": [
+          {
+            "question": "Complete: Je ___ (chanter) une chanson.",
+            "options": [
+              "chante",
+              "chantes",
+              "chanter",
+              "chantons"
+            ],
+            "correctAnswer": "chante"
+          },
+          {
+            "question": "Which form matches \"tu\" for \"respirer\"?",
+            "options": [
+              "respires",
+              "respire",
+              "respirer",
+              "respirez"
+            ],
+            "correctAnswer": "respires"
+          }
+        ]
+      },
+      {
+        "conceptId": "imperative_tu",
+        "type": "grammar",
+        "title": "Giving instructions with the imperative (tu form)",
+        "explanation": "To give an instruction to one person informally, drop \"tu\" and remove the final -s from -er verbs: \"Chante !\" (Sing!), \"Respire !\" (Breathe!).",
+        "examples": [
+          {
+            "french": "Chante plus fort !",
+            "english": "Sing louder!"
+          },
+          {
+            "french": "Respire profondément !",
+            "english": "Breathe deeply!"
+          }
+        ],
+        "questions": [
+          {
+            "question": "Which is the correct imperative form of \"chanter\" for \"tu\"?",
+            "options": [
+              "Chante !",
+              "Chantes !",
+              "Chanter !",
+              "Tu chante !"
+            ],
+            "correctAnswer": "Chante !"
+          }
+        ]
+      },
+      {
+        "conceptId": "avoir_une_belle_voix",
+        "type": "grammar",
+        "title": "Avoir + noun to describe qualities",
+        "explanation": "French uses \"avoir\" (to have) where English often uses \"to be\": \"tu as une belle voix\" literally means \"you have a beautiful voice\".",
+        "examples": [
+          {
+            "french": "Tu as une belle voix.",
+            "english": "You have a beautiful voice."
+          }
+        ],
+        "questions": [
+          {
+            "question": "Complete: Tu ___ une belle voix.",
+            "options": [
+              "as",
+              "es",
+              "avoir",
+              "ai"
+            ],
+            "correctAnswer": "as"
+          }
+        ]
+      }
+    ],
+    "order": [
+      "vocabulary",
+      "phrases",
+      "grammar"
+    ]
+  },
+  "practice": {
+    "sentenceRecall": [
+      {
+        "id": "recall_1",
+        "type": "sentenceRecall",
+        "prompt": "Translate: \"To sing.\"",
+        "expectedAnswer": "Chanter",
+        "acceptedAnswers": [
+          "Chanter",
+          "Chanter."
+        ],
+        "targetConcepts": [
+          "chanter"
+        ]
+      },
+      {
+        "id": "recall_2",
+        "type": "sentenceRecall",
+        "prompt": "Complete: \"___ profondément.\" (Breathe deeply.)",
+        "expectedAnswer": "Respire",
+        "acceptedAnswers": [
+          "Respire"
+        ],
+        "targetConcepts": [
+          "respire_profondement",
+          "imperative_tu"
+        ]
+      },
+      {
+        "id": "recall_3",
+        "type": "sentenceRecall",
+        "prompt": "Translate: \"Follow the rhythm.\"",
+        "expectedAnswer": "Suis le rythme.",
+        "acceptedAnswers": [
+          "Suis le rythme.",
+          "Suis le rythme"
+        ],
+        "targetConcepts": [
+          "suis_le_rythme",
+          "le_rythme"
+        ]
+      },
+      {
+        "id": "recall_4",
+        "type": "sentenceRecall",
+        "prompt": "Translate: \"You have a beautiful voice.\"",
+        "expectedAnswer": "Tu as une belle voix.",
+        "acceptedAnswers": [
+          "Tu as une belle voix.",
+          "Tu as une belle voix"
+        ],
+        "targetConcepts": [
+          "tu_as_une_belle_voix",
+          "avoir_une_belle_voix"
+        ]
+      }
+    ],
+    "writing": [
+      {
+        "id": "write_1",
+        "type": "writing",
+        "prompt": "Translate: \"A song.\"",
+        "english": "A song.",
+        "expectedAnswer": "Une chanson.",
+        "acceptedAnswers": [
+          "Une chanson.",
+          "Une chanson"
+        ],
+        "targetConcepts": [
+          "une_chanson"
+        ]
+      },
+      {
+        "id": "write_2",
+        "type": "writing",
+        "prompt": "Translate: \"I like to sing.\"",
+        "english": "I like to sing.",
+        "expectedAnswer": "J'aime chanter.",
+        "acceptedAnswers": [
+          "J'aime chanter.",
+          "J'aime chanter"
+        ],
+        "targetConcepts": [
+          "chanter"
+        ]
+      },
+      {
+        "id": "write_3",
+        "type": "writing",
+        "prompt": "Translate: \"Sing louder, please.\"",
+        "english": "Sing louder, please.",
+        "expectedAnswer": "Chante plus fort, s'il te plaît.",
+        "acceptedAnswers": [
+          "Chante plus fort, s'il te plaît.",
+          "Chante plus fort, s'il te plait."
+        ],
+        "targetConcepts": [
+          "chante_plus_fort",
+          "imperative_tu"
+        ]
+      },
+      {
+        "id": "write_4",
+        "type": "writing",
+        "prompt": "Translate: \"This note is too high.\"",
+        "english": "This note is too high.",
+        "expectedAnswer": "Cette note est trop haute.",
+        "acceptedAnswers": [
+          "Cette note est trop haute.",
+          "Cette note est trop haute"
+        ],
+        "targetConcepts": [
+          "une_note"
+        ]
+      }
+    ],
+    "speaking": [
+      {
+        "id": "speak_1",
+        "prompt": "Say: The voice.",
+        "expectedAnswer": "La voix.",
+        "acceptedAnswers": [
+          "La voix.",
+          "La voix"
+        ],
+        "targetConcepts": [
+          "la_voix"
+        ]
+      },
+      {
+        "id": "speak_2",
+        "prompt": "Say: Breathe deeply.",
+        "expectedAnswer": "Respire profondément.",
+        "acceptedAnswers": [
+          "Respire profondément.",
+          "Respire profondement."
+        ],
+        "targetConcepts": [
+          "respire_profondement",
+          "respirer"
+        ]
+      },
+      {
+        "id": "speak_3",
+        "prompt": "Say: I want to sing this song.",
+        "expectedAnswer": "Je veux chanter cette chanson.",
+        "acceptedAnswers": [
+          "Je veux chanter cette chanson.",
+          "Je veux chanter cette chanson"
+        ],
+        "targetConcepts": [
+          "je_veux_chanter",
+          "une_chanson"
+        ]
+      },
+      {
+        "id": "speak_4",
+        "prompt": "Say: Follow the rhythm, and sing one more time.",
+        "expectedAnswer": "Suis le rythme, et chante encore une fois.",
+        "acceptedAnswers": [
+          "Suis le rythme, et chante encore une fois.",
+          "Suis le rythme et chante encore une fois."
+        ],
+        "targetConcepts": [
+          "suis_le_rythme",
+          "encore_une_fois"
+        ]
+      }
+    ]
+  },
+  "session": {
+    "targetMinutes": 10,
+    "sections": [
+      {
+        "id": "vocabulary",
+        "label": "Vocabulary",
+        "timeLimitSeconds": 100
+      },
+      {
+        "id": "grammar",
+        "label": "Grammar",
+        "timeLimitSeconds": 100
+      },
+      {
+        "id": "sentenceRecall",
+        "label": "Sentence Recall",
+        "timeLimitSeconds": 100
+      },
+      {
+        "id": "handwriting",
+        "label": "Write It",
+        "timeLimitSeconds": 90
+      },
+      {
+        "id": "speaking",
+        "label": "Speak It",
+        "timeLimitSeconds": 105
+      },
+      {
+        "id": "mission",
+        "label": "Your Mission",
+        "timeLimitSeconds": 105
+      }
+    ]
+  },
+  "mission": {
+    "title": "Your Mission",
+    "scenario": "You are at your first singing lesson in France. Complete the conversation naturally.",
+    "instructions": "Respond naturally in French using the words and phrases you learned in this lesson.",
+    "selection": {
+      "minTurns": 3,
+      "maxTurns": 4,
+      "prioritizeWeakConcepts": true,
+      "includeNormalTurns": true,
+      "includeChallengeTurn": true
+    },
+    "turns": [
+      {
+        "id": "start_lesson",
+        "type": "instruction",
+        "difficulty": "easy",
+        "speaker": "Professeur",
+        "french": "Bonjour ! Tu veux chanter aujourd'hui ?",
+        "english": "Hello! Do you want to sing today?",
+        "targetConcepts": [
+          "je_veux_chanter",
+          "chanter"
+        ],
+        "acceptedAnswers": [
+          "Oui, je veux chanter.",
+          "Je veux chanter."
+        ]
+      },
+      {
+        "id": "breathing_instruction",
+        "type": "instruction",
+        "difficulty": "easy",
+        "speaker": "Professeur",
+        "french": "D'abord, respire profondément.",
+        "english": "First, breathe deeply.",
+        "targetConcepts": [
+          "respire_profondement",
+          "respirer"
+        ],
+        "acceptedAnswers": [
+          "D'accord.",
+          "D'accord, je respire profondément."
+        ]
+      },
+      {
+        "id": "sing_louder",
+        "type": "instruction",
+        "difficulty": "medium",
+        "speaker": "Professeur",
+        "french": "Chante plus fort, s'il te plaît !",
+        "english": "Sing louder, please!",
+        "targetConcepts": [
+          "chante_plus_fort",
+          "imperative_tu"
+        ],
+        "acceptedAnswers": [
+          "D'accord, je chante plus fort.",
+          "Oui, plus fort."
+        ]
+      },
+      {
+        "id": "compliment",
+        "type": "compliment",
+        "difficulty": "easy",
+        "speaker": "Professeur",
+        "french": "Bravo ! Tu as une belle voix.",
+        "english": "Well done! You have a beautiful voice.",
+        "targetConcepts": [
+          "tu_as_une_belle_voix",
+          "avoir_une_belle_voix"
+        ],
+        "acceptedAnswers": [
+          "Merci beaucoup.",
+          "Merci !"
+        ]
+      },
+      {
+        "id": "full_practice_challenge",
+        "type": "instruction",
+        "difficulty": "hard",
+        "speaker": "Professeur",
+        "french": "Suis le rythme, respire bien, et chante encore une fois !",
+        "english": "Follow the rhythm, breathe well, and sing one more time!",
+        "targetConcepts": [
+          "suis_le_rythme",
+          "respirer",
+          "encore_une_fois",
+          "le_rythme"
+        ],
+        "acceptedAnswers": [
+          "D'accord, je suis le rythme et je chante encore une fois.",
+          "Oui, encore une fois."
+        ]
+      }
+    ]
+  },
+  "ai": {
+    "name": "Professeur",
+    "role": "friendly French singing teacher",
+    "greeting": "Bonjour ! Je suis ton professeur de chant. Tu veux chanter aujourd'hui ?",
+    "maxWords": 12,
+    "englishAllowed": false
+  }
+}
