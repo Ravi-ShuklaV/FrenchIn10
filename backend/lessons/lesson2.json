@@ -1,0 +1,125 @@
+{
+  "id": 2,
+  "title": "Ordering Coffee",
+  "scenario": "Cafe",
+  "difficulty": "Beginner",
+
+  "estimatedTime": 10,
+  "level": "A1",
+
+  "objectives": [
+    "Greet the barista politely.",
+    "Order a coffee.",
+    "Understand simple questions.",
+    "Say thank you before leaving."
+  ],
+
+  "vocabulary": [
+    {
+      "french": "Bonjour",
+      "english": "Hello"
+    },
+    {
+      "french": "Un café",
+      "english": "A coffee"
+    },
+    {
+      "french": "Merci",
+      "english": "Thank you"
+    }
+  ],
+
+  "dialogue": [
+    {
+      "speaker": "Customer",
+      "french": "Bonjour.",
+      "english": "Hello."
+    },
+    {
+      "speaker": "Barista",
+      "french": "Bonjour, que désirez-vous ?",
+      "english": "Hello, what would you like?"
+    },
+    {
+      "speaker": "Customer",
+      "french": "Je voudrais un café, s'il vous plaît.",
+      "english": "I would like a coffee, please."
+    },
+    {
+      "speaker": "Barista",
+      "french": "Très bien.",
+      "english": "Certainly."
+    }
+  ],
+
+  "grammar": [
+    {
+      "title": "Je voudrais",
+      "explanation": "A polite way to say 'I would like'."
+    },
+    {
+      "title": "Un / Une",
+      "explanation": "French nouns usually require an article before them."
+    }
+  ],
+
+  "practice": [
+    {
+      "id": 1,
+      "question": "Translate: Hello",
+      "answer": "Bonjour"
+    },
+    {
+      "id": 2,
+      "question": "Translate: Thank you",
+      "answer": "Merci"
+    },
+    {
+      "id": 3,
+      "question": "Translate: I would like a coffee.",
+      "answer": "Je voudrais un café."
+    }
+  ],
+
+  "quiz": [
+    {
+      "id": 1,
+      "question": "What does 'Bonjour' mean?",
+      "options": [
+        "Hello",
+        "Goodbye",
+        "Coffee",
+        "Please"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "id": 2,
+      "question": "How do you say 'Thank you' in French?",
+      "options": [
+        "Bonjour",
+        "Merci",
+        "Bonsoir",
+        "Au revoir"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 3,
+      "question": "How do you politely say 'I would like'?",
+      "options": [
+        "Je suis",
+        "Je vais",
+        "Je voudrais",
+        "Je peux"
+      ],
+      "correctAnswer": 2
+    }
+  ],
+
+  "ai": {
+    "role": "French café barista",
+    "maxWords": 12,
+    "englishAllowed": false
+  }
+}
