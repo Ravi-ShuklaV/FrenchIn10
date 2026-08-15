@@ -1,7 +1,6 @@
 import axios from "axios";
 import api from "./api";
-const API = "http://localhost:5000/api/review";
-
+const API = `${import.meta.env.VITE_API_URL}/api/review`;
 function getHeaders() {
   const token = localStorage.getItem("token");
 
